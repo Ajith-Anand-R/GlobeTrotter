@@ -82,8 +82,11 @@ class City(Base):
     cost_index = Column(Float) # 1.0 = average, >1 expensive
     popularity = Column(Integer) # 0-100
     
+<<<<<<< HEAD
     popularity = Column(Integer) # 0-100
     
+=======
+>>>>>>> b1b02e3c0d2006fd00e882c768604aa877c20d20
     catalog_activities = relationship("CatalogActivity", back_populates="city")
     users_saved = relationship("SavedDestination", back_populates="city")
 

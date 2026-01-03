@@ -126,6 +126,10 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
+=======
+    <script src="../../config.js"></script>
+>>>>>>> b1b02e3c0d2006fd00e882c768604aa877c20d20
     <script>
         document.getElementById('signupBtn').addEventListener('click', async () => {
             const full_name = document.getElementById('fullName').value;
@@ -137,6 +141,7 @@
                 return;
             }
 
+<<<<<<< HEAD
             try {
                 const response = await fetch('http://127.0.0.1:8000/auth/signup', {
                     method: 'POST',
@@ -145,10 +150,40 @@
                 });
 
                 if (response.ok) {
+=======
+            const signupBtn = document.getElementById('signupBtn');
+            const originalText = signupBtn.textContent;
+            signupBtn.textContent = 'Signing up...';
+            signupBtn.disabled = true;
+
+            try {
+                console.log('Attempting to sign up:', { full_name, email });
+
+                // Use the centralized config
+                const apiUrl = `${window.config.API_BASE_URL}/auth/signup`;
+                console.log('Using API URL:', apiUrl);
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ full_name, email, password }),
+                    mode: 'cors'
+                });
+
+                console.log('Response status:', response.status);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Signup successful:', data);
+>>>>>>> b1b02e3c0d2006fd00e882c768604aa877c20d20
                     alert('Account created successfully! Please log in.');
                     window.location.href = 'code.html';
                 } else {
                     const error = await response.json();
+<<<<<<< HEAD
                     alert(error.detail || 'Signup failed');
                 }
             } catch (err) {
@@ -156,6 +191,42 @@
                 alert('An error occurred. Make sure the backend is running.');
             }
         });
+=======
+                    console.error('Signup failed:', error);
+                    alert(error.detail || 'Signup failed');
+                    signupBtn.textContent = originalText;
+                    signupBtn.disabled = false;
+                }
+            } catch (err) {
+                console.error('Fetch error:', err);
+
+                // Provide more specific error messages
+                let errorMessage = 'An error occurred. ';
+                if (err.name === 'TypeError' && err.message.includes('fetch')) {
+                    errorMessage += `Cannot connect to the backend server. Please ensure:\n\n`;
+                    errorMessage += `1. Backend is running on ${window.config.API_BASE_URL}\n`;
+                    errorMessage += `2. No firewall is blocking the connection\n`;
+                    errorMessage += `3. CORS is properly configured\n\n`;
+                    errorMessage += `Try running: python -m uvicorn backend.main:app --reload --port 8000`;
+                } else {
+                    errorMessage += err.message;
+                }
+
+                alert(errorMessage);
+                signupBtn.textContent = originalText;
+                signupBtn.disabled = false;
+            }
+        });
+
+        // Suppress Tailwind CDN warning in console (development only)
+        const originalWarn = console.warn;
+        console.warn = function (...args) {
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
+                return; // Suppress Tailwind CDN warning
+            }
+            originalWarn.apply(console, args);
+        };
+>>>>>>> b1b02e3c0d2006fd00e882c768604aa877c20d20
     </script>
 </body>
 

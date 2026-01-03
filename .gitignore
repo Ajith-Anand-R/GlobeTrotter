@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Python-specific
 __pycache__/
 *.py[cod]
@@ -8,6 +9,19 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+=======
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+>>>>>>> b1b02e3c0d2006fd00e882c768604aa877c20d20
 
 # Database
 *.db
@@ -18,6 +32,7 @@ venv.bak/
 *.log
 server_pid.txt
 
+<<<<<<< HEAD
 # OS-specific
 .DS_Store
 Thumbs.db
@@ -34,3 +49,8 @@ server_stdout.log
 server_stderr.log
 server_pid.txt
 backend/globetrotter.db
+=======
+# OS
+.DS_Store
+Thumbs.db
+>>>>>>> b1b02e3c0d2006fd00e882c768604aa877c20d20

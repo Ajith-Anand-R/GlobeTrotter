@@ -99,7 +99,11 @@
                                 class="glass-input group flex items-center rounded-lg px-3 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
                                 <span
                                     class="material-symbols-outlined text-[#aea7ac] group-focus-within:text-primary transition-colors">mail</span>
+<<<<<<< HEAD
                                 <input
+=======
+                                <input id="email"
+>>>>>>> b1b02e3c0d2006fd00e882c768604aa877c20d20
                                     class="form-input h-12 w-full border-none bg-transparent px-3 text-white placeholder:text-[#aea7ac]/50 focus:ring-0 text-sm md:text-base"
                                     placeholder="name@example.com" type="email" />
                             </div>
@@ -115,13 +119,21 @@
                                 class="glass-input group flex items-center rounded-lg px-3 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
                                 <span
                                     class="material-symbols-outlined text-[#aea7ac] group-focus-within:text-primary transition-colors">lock</span>
+<<<<<<< HEAD
                                 <input
+=======
+                                <input id="password"
+>>>>>>> b1b02e3c0d2006fd00e882c768604aa877c20d20
                                     class="form-input h-12 w-full border-none bg-transparent px-3 text-white placeholder:text-[#aea7ac]/50 focus:ring-0 text-sm md:text-base"
                                     placeholder="Enter your password" type="password" />
                             </div>
                         </div>
                         <!-- Login Button -->
+<<<<<<< HEAD
                         <button
+=======
+                        <button id="loginBtn"
+>>>>>>> b1b02e3c0d2006fd00e882c768604aa877c20d20
                             class="mt-2 flex h-12 w-full cursor-pointer items-center justify-center rounded-lg bg-primary text-sm font-bold tracking-wide text-white transition-all hover:bg-[#855979] hover:shadow-lg hover:shadow-primary/25 active:scale-[0.98]"
                             type="button">
                             Log In
@@ -180,6 +192,7 @@
         </div>
     </div>
     <script>
+<<<<<<< HEAD
         document.addEventListener('DOMContentLoaded', () => {
             const loginBtn = document.querySelector('button[type="button"]');
             const emailInput = document.querySelector('input[type="email"]');
@@ -218,6 +231,78 @@
                 }
             });
         });
+=======
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const loginBtn = document.getElementById('loginBtn');
+            const originalText = loginBtn.textContent;
+            loginBtn.textContent = 'Logging in...';
+            loginBtn.disabled = true;
+
+            try {
+                console.log('Attempting to log in:', { email });
+
+                const response = await fetch('http://127.0.0.1:8000/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password }),
+                    mode: 'cors'
+                });
+
+                console.log('Response status:', response.status);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Login successful:', data);
+                    localStorage.setItem('token', data.access_token);
+                    window.location.href = '../dashboard__home_screen_(dark_theme)/code.html';
+                } else {
+                    const error = await response.json();
+                    console.error('Login failed:', error);
+                    alert(error.detail || 'Login failed');
+                    loginBtn.textContent = originalText;
+                    loginBtn.disabled = false;
+                }
+            } catch (err) {
+                console.error('Fetch error:', err);
+
+                // Provide more specific error messages
+                let errorMessage = 'An error occurred. ';
+                if (err.name === 'TypeError' && err.message.includes('fetch')) {
+                    errorMessage += 'Cannot connect to the backend server. Please ensure:\n\n';
+                    errorMessage += '1. Backend is running on http://127.0.0.1:8000\n';
+                    errorMessage += '2. No firewall is blocking the connection\n';
+                    errorMessage += '3. CORS is properly configured\n\n';
+                    errorMessage += 'Try running: python -m uvicorn backend.main:app --reload --port 8000';
+                } else {
+                    errorMessage += err.message;
+                }
+
+                alert(errorMessage);
+                loginBtn.textContent = originalText;
+                loginBtn.disabled = false;
+            }
+        });
+
+        // Suppress Tailwind CDN warning in console (development only)
+        const originalWarn = console.warn;
+        console.warn = function (...args) {
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
+                return; // Suppress Tailwind CDN warning
+            }
+            originalWarn.apply(console, args);
+        };
+>>>>>>> b1b02e3c0d2006fd00e882c768604aa877c20d20
     </script>
 </body>
 

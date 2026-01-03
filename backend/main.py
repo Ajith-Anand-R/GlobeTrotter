@@ -12,6 +12,7 @@ from typing import List
 import models, schemas, auth, database
 from database import engine, get_db
 
+<<<<<<< HEAD
 app = FastAPI()
 print("DEBUG: LOADING MAIN.PY WITH BUDGET ENDPOINT")
 
@@ -21,6 +22,29 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+=======
+app = FastAPI(title="GlobeTrotter")
+print("DEBUG: LOADING MAIN.PY WITH BUDGET ENDPOINT")
+
+# Create database tables at import time (important for uvicorn)
+models.Base.metadata.create_all(bind=engine)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000", 
+        "http://127.0.0.1:3000", 
+        "http://localhost:8000", 
+        "http://127.0.0.1:8000",
+        "http://localhost:5500",  # Common Live Server port
+        "http://127.0.0.1:5500",
+        "*"  # Allow all origins for development
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+>>>>>>> b1b02e3c0d2006fd00e882c768604aa877c20d20
 )
 
 # --- AUTH ROUTES ---
@@ -888,6 +912,7 @@ from sqlalchemy import func, extract
 
 @app.get("/admin/stats/growth", response_model=List[schemas.GrowthData])
 def get_growth_stats(period: str = "monthly", current_admin: models.User = Depends(get_current_admin), db: Session = Depends(get_db)):
+<<<<<<< HEAD
     # Group by creation date
     if period == "monthly":
         date_format = "YYYY-MM"
@@ -896,6 +921,18 @@ def get_growth_stats(period: str = "monthly", current_admin: models.User = Depen
         
     query = db.query(
         func.to_char(models.Trip.created_at, date_format).label('period'),
+=======
+    # Group by creation date (using SQLite compatible strftime)
+    if period == "monthly":
+        date_format = "%Y-%m"
+    else:
+        date_format = "%Y-%W" # Weekly
+        
+    # Stats for Trips creation
+    # Note: SQLite uses strftime('%Y-%m', date_col)
+    query = db.query(
+        func.strftime(date_format, models.Trip.created_at).label('period'),
+>>>>>>> b1b02e3c0d2006fd00e882c768604aa877c20d20
         func.count(models.Trip.id).label('count')
     ).group_by('period').order_by('period').all()
     
