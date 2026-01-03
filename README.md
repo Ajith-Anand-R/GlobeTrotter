@@ -63,6 +63,3 @@ The repository includes several utility scripts for verification:
 -   `check_pg.py`: Verifies PostgreSQL connection.
 -   `test_budget.py`: Tests budget calculation logic.
 
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
