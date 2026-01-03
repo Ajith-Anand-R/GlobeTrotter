@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GlobeTrotter - Shared Itinerary</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Config -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#714b67",
+                        "primary-dark": "#5a3a52",
+                        "glass-border": "rgba(255, 255, 255, 0.1)",
+                        "glass-bg": "rgba(20, 20, 20, 0.6)",
+                        "glass-bg-light": "rgba(255, 255, 255, 0.05)",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px" },
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for glassmorphism feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-nav {
+            background: rgba(21, 20, 21, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+
+<body
+    class="font-display text-white bg-[#151415] min-h-screen overflow-x-hidden selection:bg-primary selection:text-white">
+    <!-- Hero Background Image (Fixed) -->
+    <div class="fixed inset-0 z-0 w-full h-full">
+        <div class="absolute inset-0 bg-black/50 z-10"></div> <!-- Dark Overlay for readability -->
+        <img alt="Scenic view of Kyoto streets at dusk with traditional lanterns" class="w-full h-full object-cover"
+            data-alt="Scenic view of Kyoto streets at dusk with traditional lanterns"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmQ0uBP0oe_gUBHqFhgMJhIsy8oNjOfpvfjnhFr7DuUel1Mr-HnuCg8fzKz_yt3TfuyWSe7PG9e5T6qH3pW9PLVnx-yrQZhTCxmBnN-UFT7jrK9sdZVM0Czyhdf5QN2vx_EbcQ_ETHeybAPAh0vUu0QOhH9tdwO8xFk9_EZEVOEcr8RRDsFxzTGmIB7g8rhaDN72ftIzLdheVhL1MlWVIO6M_XO_WOHlWJGH8-Eh6RU6c1EckGmagjZj6swPSWyStgbu05XeNzbvaA" />
+    </div>
+    <div class="relative z-10 flex flex-col min-h-screen">
+        <!-- Top Navigation (Glass) -->
+        <header class="glass-nav sticky top-0 z-50 px-6 py-4 w-full">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-3 text-white">
+                    <div class="size-8 text-primary">
+                        <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd"
+                                d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z"
+                                fill="currentColor" fill-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-white text-xl font-bold tracking-tight">GlobeTrotter</h2>
+                </div>
+                <button
+                    class="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-bold transition-all duration-300">
+                    <span class="truncate">Sign In / Join</span>
+                </button>
+                <button class="sm:hidden text-white">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </header>
+        <!-- Main Content Area -->
+        <main class="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 lg:p-12">
+            <!-- Glass Container (Main Card) -->
+            <div class="glass-panel w-full rounded-2xl md:rounded-3xl overflow-hidden flex flex-col relative">
+                <!-- Decorative Top Gradient -->
+                <div
+                    class="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-primary/20 to-transparent pointer-events-none">
+                </div>
+                <!-- 1. Itinerary Header Section -->
+                <div class="p-6 md:p-10 border-b border-white/10 relative z-10">
+                    <div class="flex flex-col lg:flex-row justify-between gap-8 items-start lg:items-end">
+                        <!-- Title & Description -->
+                        <div class="flex flex-col gap-4 max-w-2xl">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span
+                                    class="px-3 py-1 rounded-full bg-primary/30 text-primary-100 text-xs font-bold uppercase tracking-wider border border-primary/40">Public
+                                    Itinerary</span>
+                            </div>
+                            <h1 id="trip-title"
+                                class="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white drop-shadow-md">
+                                --
+                            </h1>
+                            <p id="trip-description"
+                                class="text-gray-200 text-lg md:text-xl font-normal leading-relaxed max-w-xl">
+                                --
+                            </p>
+                            <!-- Profile Mini -->
+                            <div class="flex items-center gap-3 mt-2">
+                                <div id="creator-avatar"
+                                    class="w-10 h-10 rounded-full bg-cover bg-center border-2 border-primary"
+                                    style="background-image: url('');"></div>
+                                <div>
+                                    <p id="creator-name" class="text-white text-sm font-bold">--</p>
+                                    <p class="text-gray-400 text-xs">Trip Creator</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Action Bar (Buttons) -->
+                        <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                            <button id="copy-trip-btn"
+                                class="group flex items-center justify-center gap-2 h-12 px-8 bg-primary hover:bg-[#855a79] text-white rounded-xl font-bold shadow-lg shadow-primary/20 transition-all duration-300 w-full sm:w-auto">
+                                <span
+                                    class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">content_copy</span>
+                                <span>Copy Trip to Plans</span>
+                            </button>
+                            <div class="flex gap-2">
+                                <button
+                                    class="flex items-center justify-center size-12 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all"
+                                    title="Share Link">
+                                    <span class="material-symbols-outlined text-[20px]">link</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Stats Row -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                        <div class="bg-white/5 border border-white/5 rounded-xl p-4 backdrop-blur-sm">
+                            <div class="flex items-center gap-2 text-primary mb-1">
+                                <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-gray-300">Duration</span>
+                            </div>
+                            <p id="trip-duration" class="text-2xl font-bold text-white">-- Days</p>
+                        </div>
+                        <div class="bg-white/5 border border-white/5 rounded-xl p-4 backdrop-blur-sm">
+                            <div class="flex items-center gap-2 text-primary mb-1">
+                                <span class="material-symbols-outlined text-[20px]">pin_drop</span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-gray-300">Stops</span>
+                            </div>
+                            <p id="trip-stops-count" class="text-2xl font-bold text-white">-- Spots</p>
+                        </div>
+                        <div class="bg-white/5 border border-white/5 rounded-xl p-4 backdrop-blur-sm">
+                            <div class="flex items-center gap-2 text-primary mb-1">
+                                <span class="material-symbols-outlined text-[20px]">payments</span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-gray-300">Est. Cost</span>
+                            </div>
+                            <p id="trip-cost" class="text-2xl font-bold text-white">$0</p>
+                        </div>
+                        <div class="bg-white/5 border border-white/5 rounded-xl p-4 backdrop-blur-sm">
+                            <div class="flex items-center gap-2 text-primary mb-1">
+                                <span class="material-symbols-outlined text-[20px]">group</span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-gray-300">Travelers</span>
+                            </div>
+                            <p class="text-2xl font-bold text-white">Public</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- 2. Content Body (Two Columns) -->
+                <div class="flex flex-col lg:flex-row">
+                    <!-- Left: Timeline -->
+                    <div class="w-full lg:w-2/3 p-6 md:p-10 border-b lg:border-b-0 lg:border-r border-white/10">
+                        <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">timeline</span>
+                            Itinerary Breakdown
+                        </h3>
+                        <div id="itinerary-container" class="flex flex-col gap-8 relative">
+                            <!-- Itinerary Items Injected by JS -->
+                        </div>
+                        <div class="mt-8 text-center">
+                            <button
+                                class="text-sm font-medium text-primary hover:text-white transition-colors flex items-center justify-center gap-2 mx-auto">
+                                <span>View Full Itinerary</span>
+                                <span class="material-symbols-outlined text-[18px]">expand_more</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Right: Sticky Sidebar (Map & Details) -->
+                    <div class="w-full lg:w-1/3 p-6 md:p-10 flex flex-col gap-6">
+                        <!-- Map Card -->
+                        <div class="glass-card rounded-2xl p-1.5 bg-white/5">
+                            <div
+                                class="relative w-full aspect-square rounded-xl overflow-hidden group/map cursor-pointer">
+                                <img alt="Map view of Kyoto showing pinned locations"
+                                    class="w-full h-full object-cover opacity-80 group-hover/map:opacity-100 transition-opacity duration-500"
+                                    data-location="Kyoto, Japan"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWBMG-Rw5nfRkoOTtdSigOQP5QQefufPiFcogU8qqXPQHXXN3wBVmzZd3ouPnyhAXi3w7eqPlOd3kArPlyp1sgRKiM27qsxVq563SAGge__xS1nbgzO-PuAJLcHLJSnMpTtvLe0u31P_gcmQbMiny4cw57WmDEtnGqgUDYEXiq_zUR3sySfVZBNmE7fIrMG-gPUYAB4Udv2xLDonDNK81a2V0ZZxiuR-Dd4mUUjTe8RhJN5ZPcFUgDS4jdFTn3YbUTWHqykvZFTiQt" />
+                                <div
+                                    class="absolute inset-0 bg-black/20 group-hover/map:bg-transparent transition-colors">
+                                </div>
+                                <!-- Floating Map Pins (Simulated) -->
+                                <div
+                                    class="absolute top-1/4 left-1/3 p-1.5 bg-primary rounded-full shadow-xl animate-bounce">
+                                    <span class="material-symbols-outlined text-white text-[16px]">restaurant</span>
+                                </div>
+                                <div
+                                    class="absolute bottom-1/3 right-1/4 p-1.5 bg-white text-black rounded-full shadow-xl">
+                                    <span class="material-symbols-outlined text-[16px]">temple_buddhist</span>
+                                </div>
+                                <div class="absolute bottom-4 left-4 right-4">
+                                    <button
+                                        class="w-full py-3 bg-[#151415]/80 backdrop-blur-md text-white text-sm font-bold rounded-xl border border-white/10 hover:bg-primary transition-colors flex items-center justify-center gap-2">
+                                        <span class="material-symbols-outlined">map</span>
+                                        Open Interactive Map
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Highlights / Tags -->
+                        <div class="flex flex-col gap-3">
+                            <h4 class="text-sm font-bold uppercase tracking-wider text-gray-400">Trip Themes</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm hover:bg-primary/20 hover:border-primary/50 transition-colors cursor-default">🍜
+                                    Foodie</span>
+                                <span
+                                    class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm hover:bg-primary/20 hover:border-primary/50 transition-colors cursor-default">⛩️
+                                    History</span>
+                                <span
+                                    class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm hover:bg-primary/20 hover:border-primary/50 transition-colors cursor-default">📸
+                                    Photography</span>
+                                <span
+                                    class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm hover:bg-primary/20 hover:border-primary/50 transition-colors cursor-default">🚶
+                                    Walking</span>
+                            </div>
+                        </div>
+                        <!-- CTA Box -->
+                        <div class="mt-auto pt-6 border-t border-white/10">
+                            <div
+                                class="bg-gradient-to-br from-primary/80 to-[#151415] rounded-xl p-5 border border-white/10 shadow-lg">
+                                <h4 class="font-bold text-lg mb-1">Like this trip?</h4>
+                                <p class="text-sm text-gray-200 mb-4">Save it to your account and customize it for your
+                                    dates.</p>
+                                <button
+                                    class="w-full py-2.5 bg-white text-primary font-bold rounded-lg text-sm hover:bg-gray-100 transition-colors">
+                                    Start Planning
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <footer class="mt-12 mb-6 text-center text-gray-400 text-sm">
+                <p>© 2024 GlobeTrotter. All rights reserved.</p>
+            </footer>
+        </main>
+    </div>
+</body>
+<script>
+    const API_BASE = 'http://127.0.0.1:8000';
+    const urlParams = new URLSearchParams(window.location.search);
+    const SHARE_TOKEN = urlParams.get('token');
+
+    // For copy functionality which might need auth
+    const getAuthHeaders = () => {
+        const token = localStorage.getItem('access_token');
+        return token ? { 'Authorization': `Bearer ${token}` } : {};
+    };
+
+    async function fetchPublicTrip() {
+        if (!SHARE_TOKEN) {
+            alert("No share token provided!");
+            return;
+        }
+        try {
+            const res = await fetch(`${API_BASE}/trips/public/${SHARE_TOKEN}`);
+            if (!res.ok) throw new Error("Trip not found");
+            const trip = await res.json();
+
+            // Render Header
+            document.getElementById('trip-title').textContent = trip.title;
+            document.getElementById('trip-description').textContent = trip.description || 'No description provided.';
+            document.getElementById('creator-name').textContent = trip.owner_name;
+            if (trip.owner_image) {
+                document.getElementById('creator-avatar').style.backgroundImage = `url('${trip.owner_image}')`;
+            } else {
+                document.getElementById('creator-avatar').style.backgroundImage = `url('https://ui-avatars.com/api/?name=${trip.owner_name}')`;
+            }
+
+            // Render Stats
+            const start = new Date(trip.start_date);
+            const end = new Date(trip.end_date);
+            const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            document.getElementById('trip-duration').textContent = `${days} Days`;
+            document.getElementById('trip-stops-count').textContent = `${trip.stops.length} Spots`;
+
+            // Calculate total cost (sum of stop/activity costs)
+            let totalCost = 0;
+            trip.stops.forEach(s => {
+                totalCost += (s.accommodation_cost || 0) + (s.transport_cost || 0);
+                s.activities?.forEach(a => totalCost += (a.cost || 0));
+            });
+            document.getElementById('trip-cost').textContent = `$${totalCost.toLocaleString()}`;
+
+            renderItinerary(trip.stops);
+
+        } catch (err) {
+            console.error(err);
+            document.getElementById('trip-title').textContent = "Trip Not Found or Private";
+        }
+    }
+
+    function renderItinerary(stops) {
+        const container = document.getElementById('itinerary-container');
+        container.innerHTML = '<div class="absolute left-[19px] top-4 bottom-4 w-0.5 bg-white/10 rounded-full"></div>';
+
+        stops.forEach((stop, idx) => {
+            const dateStr = new Date(stop.arrival_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+
+            let html = `
+                <div class="relative pl-12 group">
+                    <div class="absolute left-0 top-1 size-10 rounded-full bg-[#2a2529] border-2 border-primary flex items-center justify-center text-xs font-bold z-10 shadow-lg shadow-black/50">D${idx + 1}</div>
+                    <div class="glass-card rounded-xl p-5 hover:bg-white/5 transition-colors">
+                        <div class="flex justify-between items-start mb-3">
+                            <h4 class="text-xl font-bold text-white">${stop.city_name}</h4>
+                            <span class="bg-white/10 text-xs px-2 py-1 rounded text-gray-300">${dateStr}</span>
+                        </div>
+                        <div class="flex flex-col gap-3">
+            `;
+
+            if (stop.activities) {
+                stop.activities.forEach(act => {
+                    html += `
+                        <div class="flex items-center gap-3 bg-black/20 p-3 rounded-lg border border-white/5">
+                            <div class="size-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary shrink-0">
+                                <span class="material-symbols-outlined">local_activity</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-bold truncate">${act.description}</p>
+                                <p class="text-xs text-gray-400">${act.time || '--:--'} · $${act.cost}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            html += `</div></div></div>`;
+            container.innerHTML += html;
+        });
+    }
+
+    document.getElementById('copy-trip-btn').addEventListener('click', async () => {
+        try {
+            const res = await fetch(`${API_BASE}/trips/public/${SHARE_TOKEN}/copy`, {
+                method: 'POST',
+                headers: getAuthHeaders()
+            });
+
+            if (res.status === 401) {
+                alert("Please login first to copy trips!");
+                return;
+            }
+
+            if (res.ok) {
+                const newTrip = await res.json();
+                alert(`Trip copied successfully! New Trip ID: ${newTrip.id}`);
+                // window.location.href = '/dashboard'; // Redirect if dashboard exists
+            } else {
+                alert("Failed to copy trip.");
+            }
+        } catch (err) { console.error(err); }
+    });
+
+    window.addEventListener('load', fetchPublicTrip);
+</script>
+
+</html>

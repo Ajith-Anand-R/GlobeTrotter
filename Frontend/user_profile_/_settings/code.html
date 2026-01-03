@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Profile / Settings - GlobeTrotter</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#714b67",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#1b171a",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #714b67;
+            box-shadow: 0 0 0 2px rgba(113, 75, 103, 0.2);
+            outline: none;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-dark text-white min-h-screen relative overflow-x-hidden selection:bg-primary selection:text-white">
+<!-- Background Image Layer -->
+<div class="fixed inset-0 z-0">
+<div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&amp;w=2940&amp;auto=format&amp;fit=crop')] bg-cover bg-center" data-alt="starry night sky over mountains landscape"></div>
+<div class="absolute inset-0 bg-[#151415]/80 mix-blend-multiply"></div>
+<div class="absolute inset-0 bg-gradient-to-b from-[#151415]/90 via-transparent to-[#151415]/90"></div>
+</div>
+<!-- Main Content Wrapper -->
+<div class="relative z-10 flex flex-col min-h-screen">
+<!-- Navbar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-white/10 bg-black/20 backdrop-blur-md px-10 py-4 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-white">
+<div class="size-8 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-white text-xl font-bold tracking-tight">GlobeTrotter</h2>
+</div>
+<div class="hidden lg:flex items-center gap-1">
+<a class="text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-medium transition-colors" href="#">Explore</a>
+<a class="text-white bg-white/10 px-4 py-2 rounded-lg text-sm font-medium transition-colors" href="#">Settings</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<label class="hidden md:flex flex-col min-w-40 !h-10 max-w-64 relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-white/50 group-focus-within:text-white transition-colors">
+<span class="material-symbols-outlined text-lg">search</span>
+</div>
+<input class="w-full h-full bg-black/40 border border-white/10 rounded-xl pl-10 pr-4 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all" placeholder="Search destinations..."/>
+</label>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-white/70 hover:text-white transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 size-2 bg-primary rounded-full ring-2 ring-black"></span>
+</button>
+<div class="size-10 rounded-full border border-white/20 bg-center bg-cover" data-alt="User avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAlfTHLgRdbvXv7L2Pk9jFMc4zYJxe_8HCTyrIUJ1I11peT4kd-G2lkCMXW4NEqFhJZAJJlzg1XZGhHUasMf771RG1oH58pyPzrSl_8k01mzbaj7bz0PS1cPEBXZQE5SRu_leyRdCnG_xj2lYB9NsvUU03y_aVAHTCTfL1TUbPtVr0Ep7gJUQ9pe00O-eeSnTUSjonJ65yV8Rh5GIkDp771kMvJenTbTGY3glvbrNPVrgJDSqBc2aI6m1u73jtdKrCb0YEXmytqM7Ct')"></div>
+</div>
+</div>
+</header>
+<!-- Main Layout -->
+<div class="flex-1 flex justify-center p-4 lg:p-10">
+<div class="glass-panel w-full max-w-6xl rounded-3xl flex flex-col md:flex-row overflow-hidden shadow-2xl shadow-black/50">
+<!-- Sidebar -->
+<aside class="w-full md:w-72 lg:w-80 flex-shrink-0 bg-black/20 border-r border-white/5 flex flex-col">
+<div class="p-8 flex flex-col items-center border-b border-white/5">
+<div class="relative group cursor-pointer">
+<div class="size-24 rounded-full border-2 border-primary/50 p-1 mb-4">
+<div class="w-full h-full rounded-full bg-cover bg-center" data-alt="Alex Traveler avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDX9LnwvfPUguN27qL4vIqBIstpdMIkyJr929Dwsl62shyYym9y2xEKK1qkuzKlyLWbrtpC0iyvMFW_6iMrV-pLBLVmUGZAsY2b4Jc93dTt9b6EUW6RD5cYNc3QoyBPZ0YAuEo0-t8P_cDYC_cMpJIE8jY3wSZoi2Gi5dXOOrix5pwjtqYrR_12E380CYgXCJFD0XZZMMdI6Vb8DtSti1FsHiUzOWx6KHiHgY0S0v5neR9LdIrGXcN-n1pT5132AN8DhGEAljw-k910')"></div>
+</div>
+<div class="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white">photo_camera</span>
+</div>
+</div>
+<h2 class="text-xl font-bold text-white">Alex Traveler</h2>
+<div class="mt-1 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-xs font-bold uppercase tracking-wider">
+                            Pro Member
+                        </div>
+</div>
+<nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-white shadow-lg shadow-primary/20" href="#">
+<span class="material-symbols-outlined fill-1">person</span>
+<span class="font-medium">Edit Profile</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">tune</span>
+<span class="font-medium">Preferences</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-medium">Security</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">credit_card</span>
+<span class="font-medium">Billing</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">notifications_active</span>
+<span class="font-medium">Notifications</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/5">
+<button class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-colors font-medium text-sm">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+                            Sign Out
+                        </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto custom-scrollbar">
+<div class="p-8 lg:p-12 max-w-4xl mx-auto">
+<!-- Header -->
+<div class="mb-10">
+<h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Edit Profile</h1>
+<p class="text-white/50">Update your photo and personal details here.</p>
+</div>
+<!-- Profile Photo Row -->
+<div class="glass-panel p-6 rounded-2xl mb-8 flex flex-col sm:flex-row items-center gap-6">
+<div class="size-20 rounded-full bg-cover bg-center shrink-0 border border-white/10" data-alt="Current profile photo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCEG_pKj4q83zzIMXT6Bm-DtR35XhfI3juddu_RvDvdMA0LflM_3KYKiW70jCmX6vuqz-1cikss_oIuDP-CI_ZBu6_uHhFqU-5plJg0hJsF9QU7zuFKqdu2Ro--DdWciZ6YzYiWEYtphnhtuak9h4Djq82OIiXmiSRw_IToF4D17k3dH_ksfKrHI-a5e9fVx0_MFL_uWIc_4lx5_OOVF90I03eUuHeUhuTPCdz5f6wADf84TqN7QwWKEL-4_gFs2spMblF53UVU_cYS')"></div>
+<div class="flex-1 text-center sm:text-left">
+<h3 class="text-white font-semibold mb-1">Your Photo</h3>
+<p class="text-sm text-white/50 mb-4">This will be displayed on your profile.</p>
+<div class="flex gap-3 justify-center sm:justify-start">
+<button class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors border border-white/10">Change Photo</button>
+<button class="px-4 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 text-sm font-medium rounded-lg transition-colors">Remove</button>
+</div>
+</div>
+</div>
+<!-- Form -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+<!-- Name -->
+<div class="space-y-2">
+<label class="text-sm font-semibold text-white/80 uppercase tracking-wider text-[11px]">Full Name</label>
+<div class="relative">
+<span class="absolute left-4 top-3.5 material-symbols-outlined text-white/40 text-[20px]">badge</span>
+<input class="glass-input w-full rounded-xl py-3 pl-11 pr-4 placeholder:text-white/20" type="text" value="Alex Traveler"/>
+</div>
+</div>
+<!-- Username -->
+<div class="space-y-2">
+<label class="text-sm font-semibold text-white/80 uppercase tracking-wider text-[11px]">Username</label>
+<div class="relative">
+<span class="absolute left-4 top-3.5 material-symbols-outlined text-white/40 text-[20px]">alternate_email</span>
+<input class="glass-input w-full rounded-xl py-3 pl-11 pr-4 placeholder:text-white/20" type="text" value="@alextraveler"/>
+</div>
+</div>
+<!-- Email -->
+<div class="space-y-2">
+<label class="text-sm font-semibold text-white/80 uppercase tracking-wider text-[11px]">Email Address</label>
+<div class="relative">
+<span class="absolute left-4 top-3.5 material-symbols-outlined text-white/40 text-[20px]">mail</span>
+<input class="glass-input w-full rounded-xl py-3 pl-11 pr-4 placeholder:text-white/20" type="email" value="alex@globetrotter.com"/>
+</div>
+</div>
+<!-- Language -->
+<div class="space-y-2">
+<label class="text-sm font-semibold text-white/80 uppercase tracking-wider text-[11px]">Language Preference</label>
+<div class="relative">
+<span class="absolute left-4 top-3.5 material-symbols-outlined text-white/40 text-[20px]">language</span>
+<select class="glass-input w-full rounded-xl py-3 pl-11 pr-10 appearance-none bg-transparent cursor-pointer">
+<option class="text-black">English (US)</option>
+<option class="text-black">French</option>
+<option class="text-black">Spanish</option>
+<option class="text-black">Japanese</option>
+</select>
+<span class="absolute right-4 top-3.5 material-symbols-outlined text-white/40 text-[20px] pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Bio -->
+<div class="col-span-1 md:col-span-2 space-y-2">
+<label class="text-sm font-semibold text-white/80 uppercase tracking-wider text-[11px]">Bio</label>
+<textarea class="glass-input w-full rounded-xl py-3 px-4 resize-none placeholder:text-white/20" rows="3">Adventure seeker and coffee lover. Exploring the world one city at a time. ✈️☕️</textarea>
+<p class="text-xs text-right text-white/40">250 characters left</p>
+</div>
+</div>
+<!-- Saved Destinations Section -->
+<div class="mb-10">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold text-white">Saved Destinations</h3>
+<a class="text-primary text-sm font-medium hover:text-primary/80" href="#">View All</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<!-- Card 1 -->
+<div class="group relative rounded-xl overflow-hidden aspect-[4/3] cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Mountain landscape in Alps" data-location="Swiss Alps" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAje4DWglnj9ePrea-YC5lNqUNPUzbK93KCPaatVYGWzotNeuU8JZirCSpqo3oCLy9J7ENnoeJTFKLrnnMF9xsXjh6hw2Qb99wjqUuRDycetgduDpPVvBMJafK2EPTzjkuzMeOJIOKQfUnCCdAicTBk6wr7u1VQEfbwGuBSuiMpUnFWIKQuUfvW4ue4da7fhOoU6-vTj46zI_ciokVyT8MIMx_ovhdbEvJtvdh0GWuqFBZByLYTKgCXtOCujYwLJYwlH4RJHO2Adlx6')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4">
+<p class="text-white font-bold">Swiss Alps</p>
+<p class="text-white/70 text-xs">Switzerland</p>
+</div>
+<button class="absolute top-2 right-2 p-1.5 bg-black/40 rounded-full text-white/70 hover:text-white hover:bg-primary transition-colors backdrop-blur-sm">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Card 2 -->
+<div class="group relative rounded-xl overflow-hidden aspect-[4/3] cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Kyoto traditional street" data-location="Kyoto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBOkuMGcOaw1LwSGJbKDBXTT5unnR3DApOnBfyeO8RvsfkxboLROlceYib7XkWh2Kacm7GLdgGWSBEtO-qh_cLeVmMHKWTKSqmHNWGeyMxHBNjAFkUezzS__6TpRaE3pSOWslirabwIhTgGqcJra4JZZykbaNoEfonK05VBUorSTSNn5_JmMeUeO6mWrbuF_hTEHi4TSbmQHjGhjkC5dli_LyEKu7-VFMlNPYFa2zOGChmkSyFgV9Rqc35H7z2vF4wsv6F4BSStElD5')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4">
+<p class="text-white font-bold">Kyoto</p>
+<p class="text-white/70 text-xs">Japan</p>
+</div>
+<button class="absolute top-2 right-2 p-1.5 bg-black/40 rounded-full text-white/70 hover:text-white hover:bg-primary transition-colors backdrop-blur-sm">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Card 3 -->
+<div class="group relative rounded-xl overflow-hidden aspect-[4/3] cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Cinque Terre coastal view" data-location="Cinque Terre" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD5k5SHYYUHyr4cSfKv-2mBe121QTVP-dY4MyJnfYjSii8Ehf4kbVx-zI-f4YEnOtckMutFpNEwuboDrTg_G5hl2NUqnUDLU-WXur_nK6IJaCJF4ASeIeQgzgGxIpEtZVgGlgTx0Vc25ZOZkLhYeKqkoXar9DpYtCSRN_Z_LlPNMEUNU5tLdhL4wMEkSWiDIflcHmIBkQC_YoyigSds5Pr4-nQ2kBDy6k1rZrG7mt61S-j4p8Wj-yX5O4oHPULD72Ts0x7qbMWDOw4T')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4">
+<p class="text-white font-bold">Cinque Terre</p>
+<p class="text-white/70 text-xs">Italy</p>
+</div>
+<button class="absolute top-2 right-2 p-1.5 bg-black/40 rounded-full text-white/70 hover:text-white hover:bg-primary transition-colors backdrop-blur-sm">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Actions Footer -->
+<div class="flex items-center justify-between pt-6 border-t border-white/10">
+<button class="text-red-400 text-sm font-medium hover:text-red-300 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+                                Delete Account
+                            </button>
+<div class="flex gap-4">
+<button class="px-6 py-2.5 rounded-xl text-sm font-bold text-white/70 hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
+<button class="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white text-sm font-bold shadow-lg shadow-primary/30 transition-all hover:-translate-y-0.5 active:translate-y-0">Save Changes</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+</body></html>

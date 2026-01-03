@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GlobeTrotter Dashboard</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#714B67", // Updated to Deep Purple as requested
+                        "primary-hover": "#5a3c52", // Darker shade for hover states
+                        "background-light": "#f8f6f7",
+                        "background-dark": "#0F0F12", // Deep charcoal
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                        "glass-bg": "rgba(255, 255, 255, 0.03)",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0px, 0px) scale(1);
+            }
+
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+
+            100% {
+                transform: translate(0px, 0px) scale(1);
+            }
+        }
+
+        .blob {
+            animation: float 20s infinite ease-in-out;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-dark text-white font-display antialiased selection:bg-primary selection:text-white overflow-hidden relative">
+    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div
+            class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#714B67] rounded-full mix-blend-screen filter blur-[120px] opacity-30 blob">
+        </div>
+        <div class="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary rounded-full mix-blend-screen filter blur-[120px] opacity-20 blob"
+            style="animation-delay: -5s;"></div>
+        <div class="absolute top-[20%] right-[30%] w-[300px] h-[300px] bg-purple-900 rounded-full mix-blend-screen filter blur-[100px] opacity-30 blob"
+            style="animation-delay: -10s;"></div>
+    </div>
+    <div class="flex h-screen w-full">
+        <aside
+            class="hidden md:flex flex-col w-72 h-full border-r border-glass-border bg-glass-bg backdrop-blur-xl relative z-20">
+            <div class="p-6 flex items-center gap-3">
+                <div
+                    class="size-10 rounded-xl bg-gradient-to-br from-primary to-purple-800 flex items-center justify-center shadow-lg shadow-primary/20">
+                    <span class="material-symbols-outlined text-white">flight_takeoff</span>
+                </div>
+                <h1 class="text-white text-xl font-bold tracking-tight">GlobeTrotter</h1>
+            </div>
+            <nav class="flex-1 flex flex-col gap-2 px-4 py-4">
+                <a class="flex items-center gap-4 px-4 py-3 rounded-xl bg-primary shadow-lg shadow-primary/25 text-white group transition-all"
+                    href="#">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 text-gray-400 hover:text-white transition-colors group"
+                    href="../../my_trips_screen/code.html">
+                    <span class="material-symbols-outlined">airplane_ticket</span>
+                    <span class="font-medium">Trips</span>
+                </a>
+                <a class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 text-gray-400 hover:text-white transition-colors group"
+                    href="#">
+                    <span class="material-symbols-outlined">map</span>
+                    <span class="font-medium">Map</span>
+                </a>
+                <a class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 text-gray-400 hover:text-white transition-colors group"
+                    href="#">
+                    <span class="material-symbols-outlined">favorite</span>
+                    <span class="font-medium">Saved</span>
+                </a>
+                <div class="my-4 h-px bg-glass-border"></div>
+                <div class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Friends</div>
+                <div class="flex flex-col gap-3 px-2">
+                    <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 cursor-pointer">
+                        <div class="size-8 rounded-full bg-cover bg-center ring-2 ring-green-500/50"
+                            data-alt="User avatar"
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8cO2_C4z_AaWzsZoUFsJ53Plc9PiTrOKci6vR32CQKI4mdvURMU2Y2XdFD2LCYdQ-ZFXpIV2Tju6vlCeUIhI2-bw36wnxoD2k3clawCtDkFMtj5vbtBGvH7h-eE4SK3_s0gpgX6iL59lUFbQlDcKlcipAId3ebKu82tzi9cK9047XaOSOomExVKUEZv8kC5phsd9hw5JsAlDOTLLSYXC-JfGZSxDxTK4MGdc2_A-gGUK0JqXhFOJ5OWJW_FtpSc7zX5_qsohYzyr7');">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">Sarah Jenkins</span>
+                            <span class="text-xs text-green-400">In Bali</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 cursor-pointer">
+                        <div class="size-8 rounded-full bg-cover bg-center ring-2 ring-primary/50"
+                            data-alt="User avatar"
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDpWCOQk7ImXqG2qyRlmqHumIoKs4J6B54CZPdb16rgYGpJHburm0RZwXtHBBWqAeMCyaNrKMKGtkiK5jwD-CDVYLwHoAKNYmRoHMUt8S-a7ADjzGc4jycdtWIX_Q3t5sNNnIlbqRj3HNEU-Zj7v4rTfnpeSj2prJSRd350MEAqZty5IN0koAstdMqiQ_8LU0m_mTPsZBTLhvrlXxHajnbnzKvHsPqe9Zs1XwkrGnCXo7QjqVLD0XpZ94Y2OspmgCjLCeXouCU5Awdy');">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium">Mike Ross</span>
+                            <span class="text-xs text-primary">Planning Rome</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="p-4">
+                <a class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span class="font-medium">Settings</span>
+                </a>
+                <div
+                    class="mt-4 p-4 rounded-xl bg-gradient-to-br from-primary/30 to-black/40 border border-white/5 backdrop-blur-md">
+                    <p class="text-xs text-gray-300 mb-2">Pro Membership</p>
+                    <div class="w-full bg-white/10 rounded-full h-1.5 mb-2">
+                        <div class="bg-primary h-1.5 rounded-full" style="width: 75%"></div>
+                    </div>
+                    <p class="text-[10px] text-gray-400">750/1000 points to next tier</p>
+                </div>
+            </div>
+        </aside>
+        <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+            <header class="flex items-center justify-between px-8 py-5 z-20">
+                <div class="relative group w-96">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span
+                            class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors">search</span>
+                    </div>
+                    <input
+                        class="block w-full pl-10 pr-3 py-2.5 border border-glass-border rounded-xl leading-5 bg-glass-bg backdrop-blur-md text-gray-300 placeholder-gray-500 focus:outline-none focus:bg-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 sm:text-sm transition-all shadow-lg"
+                        placeholder="Search for destinations, flights..." type="text" />
+                </div>
+                <div class="flex items-center gap-4">
+                    <button
+                        class="size-10 flex items-center justify-center rounded-xl bg-glass-bg border border-glass-border hover:bg-white/10 hover:border-white/20 transition-all relative text-gray-300">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">notifications</span>
+                        <span class="absolute top-2 right-2.5 size-2 bg-primary rounded-full ring-2 ring-black"></span>
+                    </button>
+                    <div class="flex items-center gap-3 pl-4 border-l border-glass-border">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-bold text-white leading-none">Alex Morgan</p>
+                            <p class="text-xs text-gray-400 mt-1">Travel Enthusiast</p>
+                        </div>
+                        <div class="size-10 rounded-full bg-cover bg-center ring-2 ring-white/10 cursor-pointer"
+                            data-alt="Profile picture of Alex Morgan"
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCW2kArVVeZ4KzJVTI0whhRKmvQ8P6oUlHqQfpyHVv8wg8tTLEEyQ-3fSJRixjI8wHnhz5sLve8oYheoIYW4HFe8BnqUi8wDaqokesQdUGRRGv3M2a7GDkUU8Qv--fKbmVK3rS8mjNGtI_C3loHw1KJKR0oLG7y0v5MWyfz-dWYkKFiwbfGHaXu0kpf5torUEQ5GX9TH9LA3ykVLXbSF7jztKZTzQ5i8AH3wXRh8sXHq894MogArXfFPNy2oajqvg9NQpDtjqJrPcFO');">
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="flex-1 overflow-y-auto p-8 pt-2 pb-24 scroll-smooth">
+                <div class="max-w-7xl mx-auto space-y-8">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                        <div>
+                            <h2 class="text-4xl font-black text-white tracking-tight leading-tight">Good Evening, Alex
+                                <span class="text-2xl">👋</span>
+                            </h2>
+                            <p class="text-gray-400 mt-1 text-lg">Your adventure to Tokyo begins in 2 weeks.</p>
+                        </div>
+                        <div class="text-right hidden md:block">
+                            <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Current
+                                Location</div>
+                            <div class="flex items-center justify-end gap-1 text-white">
+                                <span class="material-symbols-outlined text-primary text-sm">location_on</span>
+                                <span>San Francisco, CA</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="relative w-full h-[400px] rounded-3xl overflow-hidden group shadow-2xl shadow-black/50 ring-1 ring-white/10">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                            data-alt="Vibrant night view of Tokyo cityscape with neon lights"
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD9Xghg9Zu60Agze_hKwFpDvZKjZTN-p0tZH4EtFemrGgP9OvrKSXaEpUsgw12VR2dxPWr4T4yUHZpenvt4jkLkHTpRgzXYZ1HZQgqEO1l9c7r4l5l74xLKzOx4vdb3FAk2bn6ErrvCkfME9W1DPJ_8LrWzCA1O4bXa0XY4tDo6X6dDyEJzpRFRCGuMhhq1q-9qbMonfCw5WpO7ERK0hCqaRyBSbmU81ZabNzWeUAiq-vPG2lwtQxOTW-1FDP1EoQ4MgBleibIYx29Y');">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0F0F12] via-[#0F0F12]/40 to-transparent">
+                        </div>
+                        <div class="absolute inset-0 p-8 flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <span
+                                    class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-xs font-bold text-white uppercase tracking-wider">
+                                    Upcoming Trip
+                                </span>
+                                <div
+                                    class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white">
+                                    <span class="material-symbols-outlined text-yellow-400 text-sm">sunny</span>
+                                    <span class="text-sm font-medium">18°C</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                                <div>
+                                    <h3 class="text-5xl font-black text-white mb-2 tracking-tight drop-shadow-lg">Tokyo,
+                                        Japan</h3>
+                                    <div class="flex items-center gap-4 text-gray-200 mb-6">
+                                        <div class="flex items-center gap-1">
+                                            <span
+                                                class="material-symbols-outlined text-primary text-lg">calendar_month</span>
+                                            <span>Oct 12 - Oct 20</span>
+                                        </div>
+                                        <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                        <span class="text-primary font-medium">Itinerary 80% Complete</span>
+                                    </div>
+                                    <button id="viewItineraryBtn"
+                                        class="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-primary/30 transition-all flex items-center gap-2">
+                                        View Itinerary
+                                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                                    </button>
+                                </div>
+                                <div
+                                    class="bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6 min-w-[320px]">
+                                    <p
+                                        class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-4 text-center">
+                                        Time until departure</p>
+                                    <div class="flex justify-between gap-4 text-center">
+                                        <div>
+                                            <div class="text-3xl font-bold text-white">14</div>
+                                            <div class="text-[10px] uppercase text-gray-400 mt-1">Days</div>
+                                        </div>
+                                        <div class="text-2xl text-gray-600 font-light">:</div>
+                                        <div>
+                                            <div class="text-3xl font-bold text-white">06</div>
+                                            <div class="text-[10px] uppercase text-gray-400 mt-1">Hours</div>
+                                        </div>
+                                        <div class="text-2xl text-gray-600 font-light">:</div>
+                                        <div>
+                                            <div class="text-3xl font-bold text-white">30</div>
+                                            <div class="text-[10px] uppercase text-gray-400 mt-1">Mins</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div
+                            class="bg-glass-bg backdrop-blur-md border border-glass-border rounded-2xl p-6 flex flex-col justify-between hover:border-white/20 transition-colors">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="text-lg font-bold text-white">Travel Stats</h4>
+                                <span class="material-symbols-outlined text-gray-500">bar_chart</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+                                    <p class="text-3xl font-black text-white">12</p>
+                                    <p class="text-xs text-gray-400 mt-1">Countries</p>
+                                </div>
+                                <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+                                    <p class="text-3xl font-black text-white">42k</p>
+                                    <p class="text-xs text-gray-400 mt-1">Miles</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-white/5">
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-400">Profile Level</span>
+                                    <span class="text-primary font-bold">Explorer</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-glass-bg backdrop-blur-md border border-glass-border rounded-2xl p-2 relative group overflow-hidden hover:border-white/20 transition-colors h-64 lg:h-auto">
+                            <div class="w-full h-full rounded-xl bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity"
+                                data-location="World Map Preview"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDqOFYclXB3pYBqfeI3UpGWPEL6QjyDZJslx-T5ML9R3SIDT2eb18rW7nJph84KAmIsxBdyt2Jx5v3Md1WQjWoO0xQTwqHZu8uavwNKMNCCqwvlwxXzUxAnVWTkmU8ZP4yXnozYfsI59ckbKTiExwDUx_lMuzVh6RfzXDjnHrLe9_T8KDM8SosNurGXrKlELzF69vb4DfhKnF7Ej2XGbYA2j7bZ2mnrCUawKl68xav-1G-R0gaTkRTsQ3rOdWDynRZP6cgzCWZgE1K0');">
+                            </div>
+                            <div
+                                class="absolute top-4 left-4 right-4 flex justify-between items-start pointer-events-none">
+                                <h4 class="text-lg font-bold text-white drop-shadow-md">Saved Places</h4>
+                                <span
+                                    class="size-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white border border-white/20">
+                                    <span class="material-symbols-outlined text-sm">bookmark</span>
+                                </span>
+                            </div>
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                <span
+                                    class="material-symbols-outlined text-primary text-4xl drop-shadow-lg animate-bounce">location_on</span>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-glass-bg backdrop-blur-md border border-glass-border rounded-2xl p-6 flex flex-col hover:border-white/20 transition-colors">
+                            <h4 class="text-lg font-bold text-white mb-4">Recent Activity</h4>
+                            <div class="space-y-4 overflow-y-auto pr-2 custom-scrollbar flex-1 max-h-[200px]">
+                                <div class="flex gap-3">
+                                    <div class="mt-1 size-2 rounded-full bg-primary shrink-0"></div>
+                                    <div>
+                                        <p class="text-sm text-gray-200">Booked flight to Narita (NRT)</p>
+                                        <p class="text-xs text-gray-500 mt-0.5">2 hours ago</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <div class="mt-1 size-2 rounded-full bg-blue-500 shrink-0"></div>
+                                    <div>
+                                        <p class="text-sm text-gray-200">Added "TeamLab Planets" to Itinerary</p>
+                                        <p class="text-xs text-gray-500 mt-0.5">Yesterday</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <div class="mt-1 size-2 rounded-full bg-purple-500 shrink-0"></div>
+                                    <div>
+                                        <p class="text-sm text-gray-200">Shared Trip with Sarah</p>
+                                        <p class="text-xs text-gray-500 mt-0.5">2 days ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button
+                                class="mt-auto w-full py-2 text-xs font-semibold text-gray-400 hover:text-white transition-colors border-t border-white/5 pt-3">
+                                View All History
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-white">Recommended for you</h3>
+                            <div class="flex gap-2">
+                                <button
+                                    class="size-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition-colors border border-white/5">
+                                    <span class="material-symbols-outlined text-sm">chevron_left</span>
+                                </button>
+                                <button
+                                    class="size-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition-colors border border-white/5">
+                                    <span class="material-symbols-outlined text-sm">chevron_right</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer">
+                                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                    data-alt="Snowy landscape of Reykjavik"
+                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC6GJgLZY4kyXAYASsKn277Ps-oRz1gH1edcnoSsSHRqVL8P2vKbFO1GfRiAHhhcYn2FS5UPtBlxjiDsszJKS4yxrsH7mr8rIzv18Jx-Bei0x-NoCn3g6qAb6yZexcvJx-YY-Jbd7MM2Wx3F485723CE_hO7Xp--tAKcLh_lHoX6K9n-h7nqWrgqShdJ28_6KOeMhU4Qz15u6QsvYE3bv4o6_4lrILnWlGyV1gK419XuaNOYuznIuqGcFYqcAdmWkYz5cEMLN6zzUap');">
+                                </div>
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity">
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                                    <h5 class="text-lg font-bold text-white">Reykjavik</h5>
+                                    <p class="text-sm text-gray-300">Iceland</p>
+                                    <div class="flex justify-between items-center mt-3">
+                                        <span class="text-primary font-bold text-sm">from $450</span>
+                                        <span
+                                            class="size-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors">
+                                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer">
+                                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                    data-alt="Traditional temple in Kyoto"
+                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDxz9BBVOv6etnYJDXVwiRxtvgjfVRRz12N2KAHy6FCcNkULmmoncg7oCuPmMpZgkERSTtu8bk-c8bDAIwIwDKDepxm1Z8UFHADT0fWz6EFbNhBKXynVXWQbFMOzHf5ZqrfcsbmNIDSzOQYtDHcS50-OLNCLFxbyQK87HO4L5oLWrZtsD1YRDu0CKxKtxYDpDH-XCCV0WNqZ8bWQhmKYZf-9us7WIjKfaUwwyYhBHSslu3YiFDy2FVolHRL74BX0W4M6xOdJIdX7XB6');">
+                                </div>
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity">
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                                    <h5 class="text-lg font-bold text-white">Kyoto</h5>
+                                    <p class="text-sm text-gray-300">Japan</p>
+                                    <div class="flex justify-between items-center mt-3">
+                                        <span class="text-primary font-bold text-sm">from $820</span>
+                                        <span
+                                            class="size-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors">
+                                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer">
+                                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                    data-alt="Charming street in Paris"
+                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAFJH8PAUCCRJ2nvhZYuiutdLeK_ukmLK5rF6mwRYlRVqOxQNMi7P8YMRHt-b8b5v6sbWH50udWNnasbLgL84oxURJnOtp-1gAtaX1_GXESra6Q4FGfKTW9EzTG1Ojeu4vwgKh2WMiFodC6ZCBNPwb0xPEicv_Lai60oWPa1eoF7eCfkfQ_vuVfkIKHWIt6QpHZz0hGYnKftfEB2GMgk49jlIdK1jT2U_Q_RCsn-Nfwy8SUU9WYbNzj3wbA2aSEJjEUkR2gGwTHGR-W');">
+                                </div>
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity">
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                                    <h5 class="text-lg font-bold text-white">Paris</h5>
+                                    <p class="text-sm text-gray-300">France</p>
+                                    <div class="flex justify-between items-center mt-3">
+                                        <span class="text-primary font-bold text-sm">from $620</span>
+                                        <span
+                                            class="size-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors">
+                                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer">
+                                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                    data-alt="Sunny beach in Bali"
+                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCBSDIOqyW7ATjFUseJt5QifrMdpgvzq3D_80diDbfVH9Zlao8DJO3yLogI8o-yr8lp6aY4sMkYUW014lCWR5y2eZfONFLdrjv6NqEnSsZs3mPdsp_-MpZfZOFEgb3iLzX91u9EauIU492pHhdOTg3LpCUwnhC8ZcHNvWO7g8btuwB4EOeCdmkaFbVcu7tPgZaA_jtHwjyXRLqmdeiNRpsUCupr4ZVRl_OLstPjvcHj2LRDLICQ-cADXpBUmoivc5gbmBpuonIE8WTM');">
+                                </div>
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity">
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                                    <h5 class="text-lg font-bold text-white">Bali</h5>
+                                    <p class="text-sm text-gray-300">Indonesia</p>
+                                    <div class="flex justify-between items-center mt-3">
+                                        <span class="text-primary font-bold text-sm">from $380</span>
+                                        <span
+                                            class="size-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors">
+                                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-30">
+                <div
+                    class="flex items-center gap-1 p-1.5 bg-glass-bg backdrop-blur-xl border border-glass-border rounded-full shadow-2xl shadow-black/50">
+                    <a href="../../create_trip_screen/code.html"
+                        class="flex items-center gap-2 px-5 py-3 rounded-full bg-primary text-white font-bold text-sm shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+                        <span class="material-symbols-outlined text-lg">add</span>
+                        New Trip
+                    </a>
+                    <button
+                        class="flex items-center gap-2 px-5 py-3 rounded-full hover:bg-white/10 text-white font-medium text-sm transition-colors">
+                        <span class="material-symbols-outlined text-lg">flight</span>
+                        Book Flight
+                    </button>
+                    <button
+                        class="flex items-center gap-2 px-5 py-3 rounded-full hover:bg-white/10 text-white font-medium text-sm transition-colors">
+                        <span class="material-symbols-outlined text-lg">explore</span>
+                        Explore
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '../../login_/_signup_screen/code.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/dashboard/data', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Update Welcome Message
+                    document.querySelector('h2.text-4xl').innerHTML = `Good Evening, ${data.full_name.split(' ')[0]} <span class="text-2xl">👋</span>`;
+                    document.querySelector('p.text-sm.font-bold').textContent = data.full_name;
+
+                    // Update Upcoming Trip if exists
+                    if (data.upcoming_trip) {
+                        const trip = data.upcoming_trip;
+                        document.querySelector('h3.text-5xl').textContent = trip.destination;
+                        const dateRange = `${new Date(trip.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(trip.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+                        document.querySelector('.calendar_month + span').textContent = dateRange;
+                        document.querySelector('.text-primary.font-medium').textContent = `Itinerary ${trip.completion_percentage}% Complete`;
+
+                        // Update Countdown (simplified)
+                        const daysLeft = Math.ceil((new Date(trip.start_date) - new Date()) / (1000 * 60 * 60 * 24));
+                        document.querySelector('.text-3xl.font-bold').textContent = daysLeft > 0 ? daysLeft : 0;
+
+                        // Link View Itinerary Button
+                        const viewItineraryBtn = document.getElementById('viewItineraryBtn');
+                        if (viewItineraryBtn) {
+                            viewItineraryBtn.onclick = () => {
+                                window.location.href = `../../itinerary_builder_screen/code.html?tripId=${trip.id}`;
+                            };
+                        }
+                    }
+
+                    // Update Recommendations (simplified mapping)
+                    const recContainer = document.querySelector('.grid.grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-4');
+                    if (data.recommendations && data.recommendations.length > 0) {
+                        // recContainer.innerHTML = ''; // Keep some static for demo if needed, or replace all
+                    }
+
+                } else {
+                    localStorage.removeItem('token');
+                    window.location.href = '../../login_/_signup_screen/code.html';
+                }
+            } catch (err) {
+                console.error('Failed to fetch dashboard data', err);
+            }
+        });
+    </script>
+</body>
+
+</html>

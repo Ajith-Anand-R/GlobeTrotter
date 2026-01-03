@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>My Trips - GlobeTrotter</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#714b67",
+                        "primary-light": "#96658a",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#1b171a",
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                        "glass-surface": "rgba(255, 255, 255, 0.03)",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1b171a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+
+        /* Abstract Background Glows */
+        .bg-glow-1 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(113, 75, 103, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            top: -100px;
+            left: -100px;
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(75, 113, 103, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+            bottom: -200px;
+            right: -200px;
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .glass-panel {
+            background: rgba(30, 30, 30, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card-overlay {
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0) 100%);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-dark text-white font-display overflow-x-hidden min-h-screen relative selection:bg-primary selection:text-white">
+    <!-- Ambient Background Effects -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="bg-glow-1"></div>
+        <div class="bg-glow-2"></div>
+    </div>
+    <!-- Main Layout -->
+    <div class="relative flex flex-col min-h-screen w-full z-10">
+        <!-- Navigation -->
+        <nav class="sticky top-0 z-50 w-full px-6 py-4 border-b border-glass-border glass-panel">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="size-8 bg-primary/20 rounded-lg flex items-center justify-center text-primary-light">
+                        <span class="material-symbols-outlined filled">flight_takeoff</span>
+                    </div>
+                    <h2 class="text-white text-xl font-bold tracking-tight">GlobeTrotter</h2>
+                </div>
+                <!-- Nav Links -->
+                <div
+                    class="hidden md:flex items-center gap-8 bg-white/5 rounded-full px-6 py-2 border border-white/5 backdrop-blur-md">
+                    <a class="text-gray-400 hover:text-white text-sm font-medium transition-colors"
+                        href="../dashboard_/_home_screen_(dark_theme)/code.html">Dashboard</a>
+                    <a class="text-gray-400 hover:text-white text-sm font-medium transition-colors" href="#">Explore</a>
+                    <a class="text-white text-sm font-medium relative" href="#">
+                        My Trips
+                        <span
+                            class="absolute -bottom-3 left-0 w-full h-0.5 bg-primary shadow-[0_0_10px_#714b67]"></span>
+                    </a>
+                </div>
+                <!-- User Profile -->
+                <div class="flex items-center gap-4">
+                    <button class="hidden sm:flex p-2 text-gray-400 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <div class="h-8 w-[1px] bg-white/10 hidden sm:block"></div>
+                    <button
+                        class="flex items-center gap-3 pl-1 pr-1 py-1 rounded-full hover:bg-white/5 transition-colors group">
+                        <div class="bg-center bg-no-repeat bg-cover rounded-full size-9 ring-2 ring-primary/30 group-hover:ring-primary transition-all"
+                            data-alt="User profile picture"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDCyp_DBi4TW9K-fQRFEAeB-1d6dcWe_Zd76OkSGl2Abcs6wHF-vSfEWhsCO4Pu43W4idCUwfq9WMZHO0xX_DEmjIbo2IsgKrfT-UtpWmUNvSEIWXLoWMZ8FmOz59L5lUxocG_948FogBJC6l45g6HtinSie-B0Mf_SB8nDONoIVfAXKa4dHdVo6NLot69QpU4W8g7uk5_q4ECWBm8-6UFT8k1mNRCW-470v5n_RJegiZh_kYUBuh4Jo-UuBUyHNGjI1n0hFTO51z8o");'>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <!-- Main Content Area -->
+        <main class="flex-1 w-full max-w-7xl mx-auto px-6 py-8 flex flex-col gap-8">
+            <!-- Hero / Header Section -->
+            <header class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-white/5">
+                <div class="flex flex-col gap-2">
+                    <h1
+                        class="text-4xl md:text-5xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-400">
+                        My Adventures
+                    </h1>
+                    <p class="text-gray-400 text-base md:text-lg max-w-xl">
+                        Manage your upcoming journeys and relive past memories. You have 3 upcoming trips.
+                    </p>
+                </div>
+                <button
+                    class="group flex items-center justify-center gap-2 h-12 px-6 bg-primary hover:bg-primary-light text-white rounded-xl font-bold shadow-[0_0_20px_rgba(113,75,103,0.4)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(113,75,103,0.6)]">
+                    <span class="material-symbols-outlined text-[20px]">add_circle</span>
+                    <span>Create New Trip</span>
+                </button>
+            </header>
+            <!-- Filters & Sort Toolbar -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                <!-- Tabs/Chips -->
+                <div class="flex p-1 bg-white/5 rounded-xl border border-white/5 backdrop-blur-sm">
+                    <button
+                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/20 text-white shadow-sm border border-primary/30 transition-all">
+                        <span class="material-symbols-outlined text-[18px]">grid_view</span>
+                        <span class="text-sm font-medium">All Trips</span>
+                    </button>
+                    <button
+                        class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                        <span class="material-symbols-outlined text-[18px]">calendar_month</span>
+                        <span class="text-sm font-medium">Upcoming</span>
+                    </button>
+                    <button
+                        class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                        <span class="material-symbols-outlined text-[18px]">history</span>
+                        <span class="text-sm font-medium">Past</span>
+                    </button>
+                    <button
+                        class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                        <span class="material-symbols-outlined text-[18px]">draft</span>
+                        <span class="text-sm font-medium">Drafts</span>
+                    </button>
+                </div>
+                <!-- Sort & Search -->
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <div class="relative flex-1 sm:flex-none">
+                        <span
+                            class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-[20px]">search</span>
+                        <input
+                            class="w-full sm:w-64 bg-glass-surface border border-glass-border rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all backdrop-blur-sm"
+                            placeholder="Search destinations..." type="text" />
+                    </div>
+                    <button
+                        class="flex items-center justify-center size-10 rounded-xl bg-glass-surface border border-glass-border hover:bg-white/10 text-white transition-all backdrop-blur-sm">
+                        <span class="material-symbols-outlined">filter_list</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Trip Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
+                <!-- Card 1: Upcoming -->
+                <div
+                    class="group relative aspect-[4/5] sm:aspect-[4/3] md:aspect-[3/4] overflow-hidden rounded-2xl border border-white/10 hover:border-primary/50 transition-all duration-500 hover:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]">
+                    <!-- Background Image -->
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                        data-alt="Scenic view of a traditional Japanese street in Kyoto with lanterns"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDeMpPa1URECqWti7FJQ1VSVJgH3FdquR9aNFptvMxH60YmpkmnXkdPS0DNPKWWCQGIE2FH9oEE8xF60Kd9Zcf-flXM8asHFWoUzZtZLxbc86o-Dyh-vTyaQKjOd7sHSStjZe3WHZnb3oBh3eD8f2XskKxMViF6B4sDBZCTyFxQHno9rhwamp_rzspX4CbBMz6KAuB4k846tVIj1z0HDpFFpnEzIWJdPxvkDR5gRmKxTgsK0k8rC_uPGjiX2YbsqQ14tANNfsVDbgxw");'>
+                    </div>
+                    <!-- Gradient Overlay -->
+                    <div
+                        class="absolute inset-0 glass-card-overlay opacity-80 group-hover:opacity-60 transition-opacity">
+                    </div>
+                    <!-- Status Badge -->
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-primary text-white border border-white/20 shadow-lg backdrop-blur-md">
+                            <span class="w-1.5 h-1.5 rounded-full bg-white mr-2 animate-pulse"></span>
+                            In 14 Days
+                        </span>
+                    </div>
+                    <!-- Action Menu -->
+                    <button
+                        class="absolute top-4 right-4 p-2 rounded-full bg-black/20 hover:bg-black/50 text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
+                        <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+                    </button>
+                    <!-- Content (Glass Pane) -->
+                    <div
+                        class="absolute bottom-0 inset-x-0 p-5 bg-white/5 backdrop-blur-xl border-t border-white/10 flex flex-col gap-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-xl font-bold text-white leading-tight">Summer in Kyoto</h3>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <div class="flex items-center gap-2 text-primary-light text-sm font-medium">
+                                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                                <span>Oct 12 - Oct 24, 2023</span>
+                            </div>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-300 font-medium">12 Days • 3 Cities</span>
+                                <div class="flex -space-x-2">
+                                    <div class="size-6 rounded-full border border-white/20 bg-gray-600 bg-cover"
+                                        data-alt="Friend avatar 1"
+                                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAATXxBQTPB0DTWqz2RCTyiACwr8n_t7mqjJotwHoAVwNHiQ5cw7El3y63zoMiBLWfSPr8i4LXIAXTFkDPCMU0lkXWJ6kX-m8yWwxVv7coAcE2hKzLeShrkqmNC-XsoXSwZRQaCicPE4NkAPzkIwawciJ5x328XIehL6JdlMuFqMwlO6NGa906oJtdeLcqdyMwppwzzAoQlQLZLLh2mD528s_y9CniC5jQdypJn7Ul-1NqEnnzWrUOuFk3eJI8ZcX2IAdwKyFJobGLF')">
+                                    </div>
+                                    <div class="size-6 rounded-full border border-white/20 bg-gray-600 bg-cover"
+                                        data-alt="Friend avatar 2"
+                                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCI1vNEiw38qbp6YyCR3gBQl98r1a5gpeL3QK6SrC7DIcpJMVwCawK7YYBZAGJeAEiocZvwZCU8VeZHJRZ3BGVP6zNm-dFiSSHvQ7yR4rAWtktkyHwEv8hCuxOUpyurJds6wJ17xg7LWnukM9rcwIDZblmPapdrDrzRYhwaedJHRdNvLQvvC7p55mha4PDIcrqj1w6HAQZSOwTe7CZCNcVYEK7FtR9VMTG_Zm4SxDbXsf3Un2F0aHhMXZvx9KQM4Lj2Cv3QqWV5UmtX')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2: Upcoming -->
+                <div
+                    class="group relative aspect-[4/5] sm:aspect-[4/3] md:aspect-[3/4] overflow-hidden rounded-2xl border border-white/10 hover:border-primary/50 transition-all duration-500 hover:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                        data-alt="Eiffel Tower in Paris appearing through morning mist"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCBSoHZBnL60N9FLaIXW0f_aUJ3TjTQH-x10sP4F8BHyIG-cAEbuzw3nFm8kowcq1SpY7ewKVOy0idPW6B7hr43ff1a1xKh-g-R0lUxxiiEMeJqR18r4qaDu9_yOn5mfwePk9XdXzD192whi2Wzm-U1a7htkLWbrmqjMiZ2dAEhJyklrGnwxwrH46ay9TfSa_-2fK_S1VKmOenNJzcLyIV3lUDZUxFOj0J-pvULABLvwxswOO1D4m6NkcHql3HD7u1g6OjlNoVcV0Oy");'>
+                    </div>
+                    <div
+                        class="absolute inset-0 glass-card-overlay opacity-80 group-hover:opacity-60 transition-opacity">
+                    </div>
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white border border-white/20 shadow-lg backdrop-blur-md">
+                            Upcoming
+                        </span>
+                    </div>
+                    <button
+                        class="absolute top-4 right-4 p-2 rounded-full bg-black/20 hover:bg-black/50 text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
+                        <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+                    </button>
+                    <div
+                        class="absolute bottom-0 inset-x-0 p-5 bg-white/5 backdrop-blur-xl border-t border-white/10 flex flex-col gap-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                        <h3 class="text-xl font-bold text-white leading-tight">Paris &amp; London</h3>
+                        <div class="flex flex-col gap-1">
+                            <div class="flex items-center gap-2 text-primary-light text-sm font-medium">
+                                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                                <span>Nov 05 - Nov 12, 2023</span>
+                            </div>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-300 font-medium">7 Days • 2 Countries</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3: Planning -->
+                <div
+                    class="group relative aspect-[4/5] sm:aspect-[4/3] md:aspect-[3/4] overflow-hidden rounded-2xl border border-white/10 hover:border-primary/50 transition-all duration-500 hover:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                        data-alt="Calm lake and mountains in Switzerland"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB-FNB9yxwtsjxSZmu6CVz-5rnqezPCV5Rc_D6v7BAxXBs1kq6VXOJguC83j6XQ5g-yOYcj1WHvlk6FiOXLb5ZPt82o_YXGo5YyaeC2yk_8TbbUAmnLUROFfRjCm3iXW-31G-zGq_X-9Tje9GnCKer55DKBDF1gCqqZQqaBxQ8YvM8dvkcXFUVN5K_5BhXv7Ipm-GzSpt2jr92oVWbaaR9GdppX6yd_Eg9O5XfxR5A1WJFnMbGKVXoika-d1_ojVc6vhjDvDgGcqZdD");'>
+                    </div>
+                    <div
+                        class="absolute inset-0 glass-card-overlay opacity-80 group-hover:opacity-60 transition-opacity">
+                    </div>
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-yellow-500/80 text-white border border-white/20 shadow-lg backdrop-blur-md">
+                            Draft
+                        </span>
+                    </div>
+                    <button
+                        class="absolute top-4 right-4 p-2 rounded-full bg-black/20 hover:bg-black/50 text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
+                        <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+                    </button>
+                    <div
+                        class="absolute bottom-0 inset-x-0 p-5 bg-white/5 backdrop-blur-xl border-t border-white/10 flex flex-col gap-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                        <h3 class="text-xl font-bold text-white leading-tight">Swiss Alps Tour</h3>
+                        <div class="flex flex-col gap-1">
+                            <div class="flex items-center gap-2 text-gray-400 text-sm font-medium italic">
+                                <span class="material-symbols-outlined text-[16px]">edit_calendar</span>
+                                <span>Dates TBD</span>
+                            </div>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-300 font-medium">Planning Phase</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 4: Past -->
+                <div
+                    class="group relative aspect-[4/5] sm:aspect-[4/3] md:aspect-[3/4] overflow-hidden rounded-2xl border border-white/10 hover:border-primary/50 transition-all duration-500 hover:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] grayscale hover:grayscale-0">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                        data-alt="Rice terraces in Bali, Indonesia"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBUNwT0Qo6sxuDuP9Fpajk_VlVz6r6XAZZoOqQEbmIdJGgUDoSQVYfnMPIQ4o_Y-iJtbt9MHG0vY0VUYut7S3YXwFPYuX4_wReC-CKZ8YNFke5WlWBNy3Oo9CYeex_F53vOLv0x7orsbdBz2dY4j3UT1Kac6NE0ljG7kyfZn6YDtC0fr_BowLnkhrUgLiwj-4Ccu1MC4ZXoA0Sn0dknNR5ttQ4l6UvAoYJPmKUBG7C1JyjEMC6liKvPm3Rv37qioLJQjDAsmqwdJ7D2");'>
+                    </div>
+                    <div
+                        class="absolute inset-0 glass-card-overlay opacity-80 group-hover:opacity-60 transition-opacity">
+                    </div>
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-white/5 text-gray-300 border border-white/10 shadow-lg backdrop-blur-md">
+                            <span class="material-symbols-outlined text-[14px] mr-1">check_circle</span>
+                            Completed
+                        </span>
+                    </div>
+                    <button
+                        class="absolute top-4 right-4 p-2 rounded-full bg-black/20 hover:bg-black/50 text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
+                        <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+                    </button>
+                    <div
+                        class="absolute bottom-0 inset-x-0 p-5 bg-white/5 backdrop-blur-xl border-t border-white/10 flex flex-col gap-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                        <h3 class="text-xl font-bold text-white leading-tight">Bali Retreat</h3>
+                        <div class="flex flex-col gap-1">
+                            <div class="flex items-center gap-2 text-gray-400 text-sm font-medium">
+                                <span class="material-symbols-outlined text-[16px]">history</span>
+                                <span>Aug 2023</span>
+                            </div>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-300 font-medium">14 Days • 4 Cities</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 5: Past -->
+                <div
+                    class="group relative aspect-[4/5] sm:aspect-[4/3] md:aspect-[3/4] overflow-hidden rounded-2xl border border-white/10 hover:border-primary/50 transition-all duration-500 hover:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] grayscale hover:grayscale-0">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                        data-alt="Looking out over a scenic valley in Iceland"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAwHWysiO3ZT0sSZOjU_whebEgYQtgMBtaaZc7hNtlEkpSiWxDIcP31cjvl6hguMCz4aNW4_MlYD67xAoomyJjgLVoVSdFOcS6zqJsW4vSh5hMEg09ZPivD6ud8YcYm7TRIVk5RolNnHKSnkvsE33U7ujNFWmx5EG3TgMMCGb4D780gx-y9R4xh6GmxpSX2ZbmtrsoFZ5ERbehDdLhAll3EVdPW4S3B-ACMDmZqKlb7Xa5-ed7yctO7PMS55a-cbB0MPR_rrvJoLfhu");'>
+                    </div>
+                    <div
+                        class="absolute inset-0 glass-card-overlay opacity-80 group-hover:opacity-60 transition-opacity">
+                    </div>
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-white/5 text-gray-300 border border-white/10 shadow-lg backdrop-blur-md">
+                            <span class="material-symbols-outlined text-[14px] mr-1">check_circle</span>
+                            Completed
+                        </span>
+                    </div>
+                    <button
+                        class="absolute top-4 right-4 p-2 rounded-full bg-black/20 hover:bg-black/50 text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
+                        <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+                    </button>
+                    <div
+                        class="absolute bottom-0 inset-x-0 p-5 bg-white/5 backdrop-blur-xl border-t border-white/10 flex flex-col gap-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                        <h3 class="text-xl font-bold text-white leading-tight">Iceland Expedition</h3>
+                        <div class="flex flex-col gap-1">
+                            <div class="flex items-center gap-2 text-gray-400 text-sm font-medium">
+                                <span class="material-symbols-outlined text-[16px]">history</span>
+                                <span>Mar 2023</span>
+                            </div>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-300 font-medium">5 Days • 1 Country</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 6: Past -->
+                <div
+                    class="group relative aspect-[4/5] sm:aspect-[4/3] md:aspect-[3/4] overflow-hidden rounded-2xl border border-white/10 hover:border-primary/50 transition-all duration-500 hover:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] grayscale hover:grayscale-0">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                        data-alt="Skyscrapers in New York City during sunset"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDCJgM-APcnU-ECTURC48cyqRW4RLnyvSf_VnnQYcrAw95cZ8g-W1UiuMRbdmOrPUe50R5sf-wcma7TiAsfcyTs3FNqpDeXn8TAVTmZRUXVGGc4UYOicqveJM5HI5mDVWz0cazIURJ5CMNI71BmWtCQUeIM9xRE_OKZt1tWbp41lzi5MabA9OA3Y2GbG4Ulz306tTrRh2PAOA8Rp9rmRR7kdD65rANKwrRSfQ64g6-IyYbQrjpoH-Cj2KKmvFGwrfeVtdApv4LLQYos");'>
+                    </div>
+                    <div
+                        class="absolute inset-0 glass-card-overlay opacity-80 group-hover:opacity-60 transition-opacity">
+                    </div>
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-white/5 text-gray-300 border border-white/10 shadow-lg backdrop-blur-md">
+                            <span class="material-symbols-outlined text-[14px] mr-1">check_circle</span>
+                            Completed
+                        </span>
+                    </div>
+                    <button
+                        class="absolute top-4 right-4 p-2 rounded-full bg-black/20 hover:bg-black/50 text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
+                        <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+                    </button>
+                    <div
+                        class="absolute bottom-0 inset-x-0 p-5 bg-white/5 backdrop-blur-xl border-t border-white/10 flex flex-col gap-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                        <h3 class="text-xl font-bold text-white leading-tight">NYC Weekend</h3>
+                        <div class="flex flex-col gap-1">
+                            <div class="flex items-center gap-2 text-gray-400 text-sm font-medium">
+                                <span class="material-symbols-outlined text-[16px]">history</span>
+                                <span>Dec 2022</span>
+                            </div>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-300 font-medium">3 Days • 1 City</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="my_trips.js"></script>
+</body>
+
+</html>

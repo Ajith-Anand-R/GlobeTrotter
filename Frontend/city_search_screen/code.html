@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GlobeTrotter - City Search</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#714b67",
+                        "primary-hover": "#8a5c7e",
+                        "glass-dark": "rgba(20, 20, 20, 0.6)",
+                        "glass-light": "rgba(255, 255, 255, 0.05)",
+                        "glass-border": "rgba(255, 255, 255, 0.1)",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    backdropBlur: {
+                        "xs": "2px",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for glassmorphism feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(113, 75, 103, 0.5); 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(113, 75, 103, 0.8); 
+        }
+        
+        .glass-panel {
+            background: rgba(30, 30, 35, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-input {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .glass-input:focus-within {
+            border-color: #714b67;
+            background: rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+<body class="bg-[#151415] text-white font-display overflow-hidden h-screen w-full relative">
+<!-- Background Layer -->
+<div class="absolute inset-0 z-0">
+<!-- Main background image -->
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Scenic mountain landscape with lake at dusk" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDrouqG68YrtlERmRYcHSvwtDMrsVjhB-71wHe_kzLduYh7cYYsMLlZy7VveFQlRn6EqyykMRFkrGs8xCXHqBQ0HDwqbc_nFdfWLlIXBtpY9k47G7PtoZ0nhId0WVyOYPoM0t3xXXhUPBiSUyvtXwk-yIDf5R9W2sNA7vs4-u76qT_V6K12wTLX25yy3tI6kOKA4w5EqI-I1qSzJx-wHlCkQv4EkMXG6G1o5TfZRee0I3EoRhhIs1oofZv0QNR2lWi6xa6p4jG0dF1n');">
+</div>
+<!-- Gradient overlay for readability -->
+<div class="absolute inset-0 bg-gradient-to-br from-[#151415]/90 via-[#151415]/80 to-[#2d1b2a]/60"></div>
+<!-- Additional bottom fade -->
+<div class="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#151415] to-transparent"></div>
+</div>
+<!-- Main App Container -->
+<div class="relative z-10 flex flex-col h-full">
+<!-- Navbar -->
+<header class="flex items-center justify-between whitespace-nowrap px-6 py-4 lg:px-10 border-b border-white/5 bg-black/10 backdrop-blur-sm">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 text-primary flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md">
+<span class="material-symbols-outlined text-[20px]">public</span>
+</div>
+<h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">GlobeTrotter</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-end gap-8 items-center">
+<nav class="flex items-center gap-8">
+<a class="text-white/80 hover:text-white text-sm font-medium transition-colors" href="#">My Trips</a>
+<a class="text-white/80 hover:text-white text-sm font-medium transition-colors" href="#">Saved</a>
+<a class="text-white/80 hover:text-white text-sm font-medium transition-colors" href="#">Inspiration</a>
+</nav>
+<div class="h-6 w-px bg-white/10"></div>
+<div class="flex items-center gap-3">
+<button class="relative bg-center bg-no-repeat bg-cover rounded-full size-9 ring-2 ring-white/10" data-alt="User profile avatar placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCr7KruTpWP-f8-c2BYZiQrHTHWp2PxWYZCy4vMx-8BWSA_pQ5NLk5R_O2RAvVogcXjb5lRJpDUT0gCym7av0PUdH5luctvKcaNtBombmw_LHCZuQOuPjOHVXDRnAg9IguI7Jk4_3iJ1UczgRssl8eNtcjybDiGINliv1kVV9aCCDAib_QKmbKW6C_M6GV59enQpZl5PG3EV3nJ8A319bkL7eUIYR3d_ueBr-F5DxyCGBDYobThzKDSG6tNtPk-An5hthBNOCqw5W9Q");'>
+<div class="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full border border-[#151415]"></div>
+</button>
+</div>
+</div>
+<!-- Mobile Menu Icon -->
+<div class="md:hidden text-white">
+<span class="material-symbols-outlined">menu</span>
+</div>
+</header>
+<!-- Main Content Layout -->
+<div class="flex flex-1 overflow-hidden">
+<!-- Left Panel: Search & Results -->
+<main class="flex-1 flex flex-col overflow-y-auto px-4 py-6 md:px-10 md:py-8 scroll-smooth">
+<div class="max-w-5xl w-full mx-auto flex flex-col gap-8">
+<!-- Hero / Search Section -->
+<section class="flex flex-col gap-6 pt-4 pb-2">
+<div class="flex flex-col gap-2">
+<h1 class="text-white text-4xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-lg">
+                                Where to next?
+                            </h1>
+<p class="text-white/70 text-base md:text-lg font-light">
+                                Discover your next luxury destination and add it to your itinerary.
+                            </p>
+</div>
+<!-- Search Bar -->
+<div class="w-full max-w-2xl relative group">
+<div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-purple-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+<div class="relative flex items-center w-full glass-input rounded-xl h-14 px-4 transition-all duration-300">
+<span class="material-symbols-outlined text-gray-400 mr-3">search</span>
+<input autofocus="" class="bg-transparent border-none outline-none text-white placeholder-gray-400 flex-1 text-base h-full focus:ring-0 p-0" placeholder="Search for a city (e.g., Tokyo, Paris)..." type="text" value="Tok"/>
+<button class="ml-2 bg-primary hover:bg-primary-hover text-white text-sm font-bold py-2 px-5 rounded-lg transition-colors shadow-lg">
+                                    Search
+                                </button>
+</div>
+</div>
+<!-- Filters -->
+<div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+<button class="glass-panel hover:bg-white/10 flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full px-4 transition-all">
+<span class="text-white/90 text-sm font-medium">All Regions</span>
+<span class="material-symbols-outlined text-white/70 text-[18px]">expand_more</span>
+</button>
+<button class="bg-primary border border-primary/50 flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full px-4 shadow-[0_0_15px_rgba(113,75,103,0.4)]">
+<span class="text-white text-sm font-medium">Asia</span>
+<span class="material-symbols-outlined text-white text-[18px]">close</span>
+</button>
+<button class="glass-panel hover:bg-white/10 flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full px-4 transition-all">
+<span class="text-white/90 text-sm font-medium">Europe</span>
+</button>
+<button class="glass-panel hover:bg-white/10 flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full px-4 transition-all">
+<span class="text-white/90 text-sm font-medium">North America</span>
+</button>
+<div class="w-px h-6 bg-white/20 mx-1 self-center"></div>
+<button class="glass-panel hover:bg-white/10 flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full px-4 transition-all">
+<span class="text-white/90 text-sm font-medium">Budget</span>
+<span class="material-symbols-outlined text-white/70 text-[18px]">attach_money</span>
+</button>
+</div>
+</section>
+<!-- Results Section -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xl font-bold text-white tracking-tight">Search Results</h3>
+<span class="text-sm text-white/50">3 destinations found</span>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+<!-- Card 1: Tokyo -->
+<div class="@container group">
+<div class="glass-panel flex flex-col sm:flex-row p-3 rounded-2xl gap-4 hover:bg-white/10 transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl hover:border-white/20">
+<div class="w-full sm:w-40 h-40 sm:h-auto shrink-0 rounded-xl overflow-hidden relative">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="Neon streets of Tokyo at night" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC-xQebSki7zhD7s61WmZKeDRCXHn9GaM9TGz1DML9J_a1MB-jnndVTu3rhHed2t-xdJUTGM9otA7KSDypSQe1eL6OlR72p1-D5wfOU0NZiAvDhDeANGYoxhZAkdEUyZYfaY1AaGYiM4tKWiWYg8WpsEjJ6MWj6I0ycOSmwmYQeKzs4pkekF0lqoAd8kTJpTuvhsja6bLHm6_J4ka_Sj1MAf-w1LPksqUhksmkjfFy1sHgd9VHdflQzkltaDOsYzyMEcylhk7AzX5jo");'>
+</div>
+<div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white border border-white/10">
+                                            Popular
+                                        </div>
+</div>
+<div class="flex flex-col flex-1 justify-between py-1 pr-1">
+<div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="text-xl font-bold text-white">Tokyo</h4>
+<p class="text-white/60 text-sm flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Japan
+                                                    </p>
+</div>
+<div class="flex items-center gap-1 text-yellow-400 bg-yellow-400/10 px-2 py-1 rounded-lg border border-yellow-400/20">
+<span class="material-symbols-outlined text-[14px] fill-current">star</span>
+<span class="text-xs font-bold">4.9</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-white/80">Nightlife</span>
+<span class="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-white/80">Shopping</span>
+<span class="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-white/80">Food</span>
+</div>
+</div>
+<div class="flex items-end justify-between mt-4">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase text-white/40 font-bold tracking-wider">Cost Index</span>
+<div class="flex text-white text-sm font-medium">
+<span>$$$</span><span class="text-white/30">$</span>
+</div>
+</div>
+<button class="flex items-center gap-2 bg-primary hover:bg-primary-hover active:scale-95 text-white text-sm font-bold px-4 py-2 rounded-lg transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                                                Add to Trip
+                                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Kyoto -->
+<div class="@container group">
+<div class="glass-panel flex flex-col sm:flex-row p-3 rounded-2xl gap-4 hover:bg-white/10 transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl hover:border-white/20">
+<div class="w-full sm:w-40 h-40 sm:h-auto shrink-0 rounded-xl overflow-hidden relative">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="Traditional Kyoto street with pagodas" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBlY-XA5pB8PvmKtE2raeLIoAnGJzm5NmimjLvaQFbk51cd11qrXtZZdHaRk51EQ3wnCuPV9vwv4pww7jT7AgVgTo4qY6DnT5Jlk8xVaSaVARLB_PN0NI5IFdXZVNq9laQ8RNaPGiX8MyKLJ_TswOQCx5x80kqqV6o0cKej8L0NeUo3d_Mub_7-qkk63l5LuiZqo7Gbh8HnXBj0ne6rOZZVi4cpHtLjB9LlYKXqkuIszbdBSkS4T5tS996eMYIOYvpBs3RifEWifNf7");'>
+</div>
+<div class="absolute top-2 left-2 bg-primary/80 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white border border-white/10">
+                                            Trending
+                                        </div>
+</div>
+<div class="flex flex-col flex-1 justify-between py-1 pr-1">
+<div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="text-xl font-bold text-white">Kyoto</h4>
+<p class="text-white/60 text-sm flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Japan
+                                                    </p>
+</div>
+<div class="flex items-center gap-1 text-white/60 bg-white/5 px-2 py-1 rounded-lg border border-white/10">
+<span class="material-symbols-outlined text-[14px]">star</span>
+<span class="text-xs font-bold">4.7</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-white/80">Culture</span>
+<span class="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-white/80">History</span>
+</div>
+</div>
+<div class="flex items-end justify-between mt-4">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase text-white/40 font-bold tracking-wider">Cost Index</span>
+<div class="flex text-white text-sm font-medium">
+<span>$$</span><span class="text-white/30">$$</span>
+</div>
+</div>
+<button class="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-sm font-bold px-4 py-2 rounded-lg transition-all border border-white/10">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                                                Add to Trip
+                                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3: Osaka -->
+<div class="@container group">
+<div class="glass-panel flex flex-col sm:flex-row p-3 rounded-2xl gap-4 hover:bg-white/10 transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl hover:border-white/20">
+<div class="w-full sm:w-40 h-40 sm:h-auto shrink-0 rounded-xl overflow-hidden relative">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="Dotonbori canal in Osaka at night" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD_a15c6l16cc2vwvS--TN-P1IgJhjP_KpquPDSFMK9RmMGbnDZbdPTDAh4ilk6aJjvqzMa0BhIy0SdSHjCy9_VEdUI0tMrYLdrnxPUk4Zhmnwz9uMCttuMFYJZlKFA3fSs0vuVGx_Zom3dOGFuhaEbbRrAAaQjYCWkhYjUQhmgbruv9fvjNP-wZ00xCCdE1b2COcrefYbnNlzxHJjvxexAPHy9S0aTbd9-VYMJiEBtrEQ7pyC2FGxougMKSsusdPkMS1qsJlC3Q8nJ");'>
+</div>
+</div>
+<div class="flex flex-col flex-1 justify-between py-1 pr-1">
+<div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="text-xl font-bold text-white">Osaka</h4>
+<p class="text-white/60 text-sm flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Japan
+                                                    </p>
+</div>
+<div class="flex items-center gap-1 text-white/60 bg-white/5 px-2 py-1 rounded-lg border border-white/10">
+<span class="material-symbols-outlined text-[14px]">star</span>
+<span class="text-xs font-bold">4.5</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-white/80">Street Food</span>
+<span class="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-white/80">Urban</span>
+</div>
+</div>
+<div class="flex items-end justify-between mt-4">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase text-white/40 font-bold tracking-wider">Cost Index</span>
+<div class="flex text-white text-sm font-medium">
+<span>$$</span><span class="text-white/30">$$</span>
+</div>
+</div>
+<button class="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-sm font-bold px-4 py-2 rounded-lg transition-all border border-white/10">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                                                Add to Trip
+                                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Right Panel: Trip Drawer / Sidebar -->
+<aside class="hidden lg:flex w-96 flex-col border-l border-white/5 bg-black/20 backdrop-blur-md relative z-20">
+<div class="p-6 flex flex-col h-full">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-white">Current Trip</h3>
+<button class="text-primary hover:text-white transition-colors text-sm font-medium">Details</button>
+</div>
+<!-- Trip Header Card -->
+<div class="p-4 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 mb-6">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h4 class="font-bold text-white text-lg">Summer 2024</h4>
+<p class="text-white/60 text-xs">Jun 15 - Jul 02 • 18 Days</p>
+</div>
+<div class="bg-primary/20 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">flight_takeoff</span>
+</div>
+</div>
+<div class="w-full bg-black/30 h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 35%"></div>
+</div>
+<p class="text-right text-[10px] text-white/40 mt-1">2 cities added</p>
+</div>
+<h4 class="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">Itinerary</h4>
+<!-- Itinerary List -->
+<div class="flex-1 overflow-y-auto space-y-3 pr-2">
+<!-- Item 1 -->
+<div class="flex gap-3 items-center group cursor-pointer p-2 rounded-lg hover:bg-white/5 transition-colors">
+<div class="w-12 h-12 rounded-lg bg-cover bg-center shrink-0 border border-white/10" data-alt="Small thumbnail of Tokyo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBfLIx7GHrqKqEitRUj00ptXcfYOQR4r2vu6dekaqL3vbCOoUyyve-sHG7utzuMgHQprqqAk1dqVorCM7LY5ge82OIhQgmZQ1T-0JVmEmyGrm7LSyLoeRg1LqBFcfCGjC38P_HSSz0D7DIKvIloHC5W-bz63pzIZj0Di2noMJfG5HviXBbMIOxEqo3jhW1u_kgVVUXgG-FY3aYTcW2bRSYxma90Hg0Fm5Fqq9Q2YKjP4CZcEgYfskNpROmuOpRdA2B68Te5477hMiYz");'>
+</div>
+<div class="flex-1 min-w-0">
+<h5 class="text-sm font-bold text-white truncate">Tokyo</h5>
+<p class="text-xs text-white/50 truncate">5 Days • Hotel booked</p>
+</div>
+<button class="text-white/20 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+<!-- Connector Line -->
+<div class="pl-6 py-1">
+<div class="w-px h-6 bg-white/10 border-l border-dashed border-white/20"></div>
+</div>
+<!-- Item 2 -->
+<div class="flex gap-3 items-center group cursor-pointer p-2 rounded-lg hover:bg-white/5 transition-colors">
+<div class="w-12 h-12 rounded-lg bg-cover bg-center shrink-0 border border-white/10" data-alt="Small thumbnail of Seoul" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBdL3s9R4zChau1w5zKqUDOVfC_xB6nhjRe3zjXtUoBMOWY2WGGHwzLmlJD8ob7O0jNcqVTnhmfvI5xd2DUyMFXf66LIL2M8p8S1GaQvhRrbUlKzMO4bzQFEPSvsUtxJTpyjkMdWkMEwEuufEr9C5n4Ek-zFbonXotAkb291hDhX7hBzKjpRlInDO7_FxrO8pRALUu8wMe2enoVFAenvBOSDKguSwbpCk4r0qiHRZQov3YHOoY1MwxIRl9mLkuhYZ0SrSHyfUUUAWaQ");'>
+</div>
+<div class="flex-1 min-w-0">
+<h5 class="text-sm font-bold text-white truncate">Seoul</h5>
+<p class="text-xs text-white/50 truncate">4 Days • Drafting</p>
+</div>
+<button class="text-white/20 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+<!-- Connector Line -->
+<div class="pl-6 py-1">
+<div class="w-px h-6 bg-white/10 border-l border-dashed border-white/20"></div>
+</div>
+<!-- Add Placeholder -->
+<div class="flex gap-3 items-center p-2 rounded-lg border border-dashed border-white/10 bg-white/5">
+<div class="w-12 h-12 rounded-lg bg-white/5 shrink-0 flex items-center justify-center text-white/20">
+<span class="material-symbols-outlined text-[20px]">add_location</span>
+</div>
+<div class="flex-1 min-w-0">
+<h5 class="text-sm font-medium text-white/40">Next Destination</h5>
+</div>
+</div>
+</div>
+<!-- Sidebar Footer -->
+<div class="mt-4 pt-4 border-t border-white/10">
+<div class="flex justify-between items-center mb-4">
+<span class="text-white/60 text-sm">Est. Total Cost</span>
+<span class="text-white font-bold text-lg">$3,450</span>
+</div>
+<button class="w-full bg-white text-primary hover:bg-gray-100 font-bold py-3 rounded-xl transition-colors shadow-lg">
+                            Review Trip
+                        </button>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</body></html>

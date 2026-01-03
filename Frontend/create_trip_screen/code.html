@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Create Trip - GlobeTrotter</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Config -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#714b66",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#1b171a",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "3xl": "2.5rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for glassmorphism feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.65);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.07) !important;
+            border-color: #714b66 !important;
+            box-shadow: 0 0 0 2px rgba(113, 75, 102, 0.3) !important;
+        }
+    </style>
+</head>
+
+<body class="bg-background-dark text-white font-display overflow-x-hidden antialiased">
+    <!-- Main Background Wrapper -->
+    <div class="relative min-h-screen w-full flex flex-col">
+        <!-- Background Image -->
+        <div class="fixed inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#151415] z-10"></div>
+            <div class="w-full h-full bg-cover bg-center bg-no-repeat transform scale-105"
+                data-alt="Scenic mountain road view travel background"
+                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBdkmk3URHRM3t5YyS51QWB9Rty9tx9aQ_hNSZv0JOfL_JTkTqa4Uxxf_bmhIlfeX4AjMNV8Ijz1Plk1Pey4QN6Zl-z-4jr_bRPMRaUcg4XaaRmU2303njCArjB5pkRoKY_oOTV-9tBaiXc5F4lepBKAucNOYv3BJkbrv9bXTnQ3EYLzw0ehsA5K9JAJivKT4mkpkG5tdqQTAGrXOn-9-IGp-yOJHx0AkD48zp8IZKsiA8vNbvEe4yYs0TA6Mg186Ip2CFfFGrI6iqC');">
+            </div>
+        </div>
+        <!-- Top Navigation Bar (Adapted to be transparent/glassy) -->
+        <header
+            class="relative z-20 flex items-center justify-between whitespace-nowrap px-10 py-5 border-b border-white/5 bg-gradient-to-b from-black/50 to-transparent">
+            <div class="flex items-center gap-4 text-white">
+                <div class="size-8 text-primary">
+                    <svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <path clip-rule="evenodd"
+                            d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z"
+                            fill="currentColor" fill-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">GlobeTrotter</h2>
+            </div>
+            <div class="flex items-center gap-8">
+                <div class="hidden md:flex items-center gap-9">
+                    <a class="text-white/80 hover:text-white transition-colors text-sm font-medium leading-normal"
+                        href="../dashboard_/_home_screen_(dark_theme)/code.html">Dashboard</a>
+                    <a class="text-white text-sm font-medium leading-normal border-b-2 border-primary pb-0.5"
+                        href="../my_trips_screen/code.html">My Trips</a>
+                    <a class="text-white/80 hover:text-white transition-colors text-sm font-medium leading-normal"
+                        href="#">Explore</a>
+                    <a class="text-white/80 hover:text-white transition-colors text-sm font-medium leading-normal"
+                        href="#">Community</a>
+                </div>
+                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-white/20"
+                    data-alt="User profile avatar"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBjGzKkdVPQL0gETpx80VXLq-Ct2QRj2jnZ92gcTRhPnzMryEzMWxi74xyn7jJySB5YYDybH7FRZbiQv5ypvCeTdCDLKyIXiJ_YAdM1lul-mlvNVatj0g7DwU95-NK7l-JXjMRMnJnYEu2w1j5gsQSG9O9HsW21ub-hi8rq2hAZ8zRstKJvfsI7TdrBZwutptF6F0_SfutnSLcgiENuSvStkCwmTlWUs5k-5GHhMaw3gJhWpD8eCPWTEQuxBwrsIbG6OGzGbalPV9lh");'>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content Area -->
+        <main class="relative z-20 flex-1 flex flex-col items-center justify-center p-4 md:p-8 lg:p-12">
+            <!-- Glass Card Container -->
+            <div class="glass-panel w-full max-w-4xl rounded-3xl p-8 md:p-12 animate-fade-in-up">
+                <!-- Header Section -->
+                <div
+                    class="flex flex-col md:flex-row justify-between items-start gap-6 mb-10 border-b border-white/10 pb-6">
+                    <div class="flex flex-col gap-2">
+                        <h1 class="text-white text-3xl md:text-4xl font-extrabold leading-tight tracking-[-0.033em]">
+                            Start a New Adventure</h1>
+                        <p class="text-white/60 text-base font-normal leading-normal">Fill in the details below to
+                            kickstart your itinerary.</p>
+                    </div>
+                    <button class="group p-2 rounded-full hover:bg-white/10 transition-colors">
+                        <span class="material-symbols-outlined text-white/60 group-hover:text-white">close</span>
+                    </button>
+                </div>
+                <!-- Form Grid -->
+                <form class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <!-- Left Column: Inputs -->
+                    <div class="md:col-span-7 flex flex-col gap-6">
+                        <!-- Trip Name -->
+                        <div class="flex flex-col gap-2">
+                            <label class="text-white text-sm font-semibold tracking-wide uppercase opacity-90 pl-1">Trip
+                                Name</label>
+                            <div class="relative">
+                                <span
+                                    class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/40">flight_takeoff</span>
+                                <input
+                                    class="glass-input w-full rounded-xl h-14 pl-12 pr-4 placeholder:text-white/30 text-base font-normal focus:ring-0"
+                                    placeholder="e.g., Summer in Kyoto" type="text" />
+                            </div>
+                        </div>
+                        <!-- Dates (Flex Row) -->
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <div class="flex flex-col gap-2 flex-1">
+                                <label
+                                    class="text-white text-sm font-semibold tracking-wide uppercase opacity-90 pl-1">Start
+                                    Date</label>
+                                <div class="relative">
+                                    <span
+                                        class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/40">calendar_today</span>
+                                    <input
+                                        class="glass-input w-full rounded-xl h-14 pl-12 pr-4 placeholder:text-white/30 text-base font-normal focus:ring-0 [&amp;::-webkit-calendar-picker-indicator]:invert"
+                                        type="date" />
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-2 flex-1">
+                                <label
+                                    class="text-white text-sm font-semibold tracking-wide uppercase opacity-90 pl-1">End
+                                    Date</label>
+                                <div class="relative">
+                                    <span
+                                        class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/40">event</span>
+                                    <input
+                                        class="glass-input w-full rounded-xl h-14 pl-12 pr-4 placeholder:text-white/30 text-base font-normal focus:ring-0 [&amp;::-webkit-calendar-picker-indicator]:invert"
+                                        type="date" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Description -->
+                        <div class="flex flex-col gap-2">
+                            <label class="text-white text-sm font-semibold tracking-wide uppercase opacity-90 pl-1">Vibe
+                                / Notes</label>
+                            <textarea
+                                class="glass-input w-full rounded-xl min-h-[140px] p-4 placeholder:text-white/30 text-base font-normal resize-none focus:ring-0"
+                                placeholder="What is the goal of this trip? Any specific places you want to visit?"></textarea>
+                        </div>
+                    </div>
+                    <!-- Right Column: Upload & Cover -->
+                    <div class="md:col-span-5 flex flex-col gap-6">
+                        <label class="text-white text-sm font-semibold tracking-wide uppercase opacity-90 pl-1">Cover
+                            Photo</label>
+                        <div
+                            class="flex-1 rounded-2xl border-2 border-dashed border-white/20 hover:border-primary/60 hover:bg-white/5 transition-all cursor-pointer group flex flex-col items-center justify-center p-6 text-center min-h-[240px] relative overflow-hidden">
+                            <!-- Background pattern for visual interest -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                            </div>
+                            <div class="relative z-10 flex flex-col items-center gap-3">
+                                <div
+                                    class="size-16 rounded-full bg-white/5 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                                    <span
+                                        class="material-symbols-outlined text-3xl text-primary/80 group-hover:text-primary">add_photo_alternate</span>
+                                </div>
+                                <p class="text-white font-medium text-lg">Upload Cover</p>
+                                <p class="text-white/40 text-sm">Drag &amp; drop or browse</p>
+                                <p class="text-white/20 text-xs mt-4">Supports: JPG, PNG, WEBP</p>
+                            </div>
+                        </div>
+                        <!-- Toggle Switch Example -->
+                        <div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5">
+                            <div class="flex flex-col">
+                                <span class="text-white text-sm font-medium">Make Trip Public</span>
+                                <span class="text-white/40 text-xs">Share your itinerary with community</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input checked="" class="sr-only peer" type="checkbox" value="" />
+                                <div
+                                    class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+                <!-- Footer Actions -->
+                <div
+                    class="flex flex-col-reverse md:flex-row justify-end items-center gap-4 mt-10 pt-6 border-t border-white/10">
+                    <button
+                        class="w-full md:w-auto px-8 py-3.5 rounded-xl text-white/70 hover:text-white hover:bg-white/5 font-medium transition-colors text-sm">
+                        Cancel
+                    </button>
+                    <button
+                        class="w-full md:w-auto px-8 py-3.5 rounded-xl bg-primary hover:bg-[#855b79] text-white font-bold text-sm shadow-[0_0_20px_rgba(113,75,102,0.4)] hover:shadow-[0_0_30px_rgba(113,75,102,0.6)] transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-[20px]">rocket_launch</span>
+                        Create Trip
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="create_trip.js"></script>
+</body>
+
+</html>

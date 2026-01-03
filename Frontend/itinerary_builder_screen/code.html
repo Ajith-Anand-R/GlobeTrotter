@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GlobeTrotter - Itinerary Builder</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&amp;family=Noto+Sans:wght@400;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#714b67",
+                        "primary-light": "#9c6b8f",
+                        "primary-dark": "#4a2d42",
+                        "glass-border": "rgba(255, 255, 255, 0.1)",
+                        "glass-surface": "rgba(255, 255, 255, 0.05)",
+                        "glass-surface-hover": "rgba(255, 255, 255, 0.08)",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#1b171a",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(30, 25, 30, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37)
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(113, 75, 103, 0.5);
+            /* Primary color hint */
+            transform: translatey(-2px)
+        }
+
+        /* Custom Scrollbar for the dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1b171a
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px
+        }
+
+        /* Background image overlay */
+        .bg-scenic {
+            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuD4z3aSsT68J4dqvduaR_FL4haGWe4TUNxL3bLJxpsl8VPJyizeh3wMaGiECwXhdl8jj92P0fcNl1OXZX-rFeWueDn1iHBrPhg__pMiXAruiUulQH71SaYiKY79KJfzeRgjPLE5s4wLHLDTqD05NE1IbYfYOiWcgK8HULn-ll8TohgkXy2q7rqBfDuZYsM4XtPsMlc1jXqMW1Yx4AgtiYZ6-ZXIEwh5TvrPpMB-UJRsIvix-rBQk35x8XkQSAWRGS127YtNNM65jCh8);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed
+        }
+
+        .overlay-gradient {
+            background: linear-gradient(180deg, rgba(21, 20, 21, 0.85) 0%, rgba(27, 23, 26, 0.95) 100%)
+        }
+    </style>
+</head>
+
+<body class="font-display text-white overflow-hidden h-screen flex flex-col bg-background-dark">
+    <!-- Scenic Background with Overlay -->
+    <div class="fixed inset-0 z-0 bg-scenic" data-alt="Dark scenic mountain landscape at dusk with fog">
+        <div class="absolute inset-0 overlay-gradient"></div>
+    </div>
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 flex flex-col h-full">
+        <!-- Header (Glassmorphism) -->
+        <header
+            class="glass-panel sticky top-0 z-50 flex items-center justify-between px-8 py-4 border-b border-glass-border">
+            <div class="flex items-center gap-4">
+                <div
+                    class="flex items-center justify-center size-10 rounded-xl bg-primary bg-opacity-20 text-primary border border-primary/30">
+                    <span class="material-symbols-outlined">travel_explore</span>
+                </div>
+                <div class="flex flex-col">
+                    <h1 class="text-xl font-bold tracking-tight">Summer in Italy</h1>
+                    <div class="flex items-center gap-2 text-xs text-gray-400">
+                        <span>Oct 10 - Oct 25</span>
+                        <span class="size-1 rounded-full bg-gray-500"></span>
+                        <span>$3,200 Budget</span>
+                    </div>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center gap-8">
+                <a class="text-sm font-medium text-white/90 hover:text-primary transition-colors" href="#">Dashboard</a>
+                <a class="text-sm font-medium text-primary border-b-2 border-primary pb-0.5" href="#">Itinerary</a>
+                <a class="text-sm font-medium text-white/90 hover:text-primary transition-colors" href="#">Expenses</a>
+                <a class="text-sm font-medium text-white/90 hover:text-primary transition-colors" href="#">Map View</a>
+            </nav>
+            <div class="flex items-center gap-3">
+                <div class="flex -space-x-2 mr-4">
+                    <img alt="Profile picture of a woman smiling"
+                        class="inline-block h-8 w-8 rounded-full ring-2 ring-[#1b171a]" data-alt="User avatar 1"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJBQ0E4n948xPZWJ04eH3zl5XAkC969JKOoELlWDP1cCfAD97aY15UemC1-Wc-IFWF-Ck5epnG0zTCFli82ELdB69mjQ8Rm8tuMSt6cbpO_U_eUIfrgbyBm1qNhXIO8eI7F2Kvi3mHhXh-maA9daNIoRmSENhDP5X8jBR4F8qCX3zvtjwkvL0oLxtBwpuRKFIXqTq26dGCmZ_tFFF50ytxXIkPWnBYxVRjuq-oBxixB43lThvtQmWS3bkh4f7AgzV7XoC--iWBKClb" />
+                    <img alt="Profile picture of a man looking away"
+                        class="inline-block h-8 w-8 rounded-full ring-2 ring-[#1b171a]" data-alt="User avatar 2"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDB7reKjxdt0GK6dfMgw3ta8b8ZAZqTWc8xLSZRT9g9ZeZVqhzt432oqGnFBcNhmwtUSXXbgPw-CKd-tBkQP_Zblr6hC7GziwnnDtNwpCBZqQDg-QpsHpZQsGm1bH_RaE1yjeX9srynX8E1M7OFBZKlIQXtbGKUj6U1OmCENeCdR--YPIq7kxMTeRQ-ePJlbfLJB12TKWfwEww8HW40gFU0kpWJItZOkivWNB4CUJP__P_JBpDleRKDOvo4cPr_1qPxEx80KeF22cG1" />
+                    <button
+                        class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-700 ring-2 ring-[#1b171a] hover:bg-gray-600 transition-colors">
+                        <span class="material-symbols-outlined text-xs">add</span>
+                    </button>
+                </div>
+                <button
+                    class="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-light text-white text-sm font-bold rounded-lg transition-all shadow-lg shadow-primary/20">
+                    <span class="material-symbols-outlined text-[18px]">save</span>
+                    <span>Save</span>
+                </button>
+            </div>
+        </header>
+        <!-- Main Workspace -->
+        <main class="flex flex-1 overflow-hidden">
+            <!-- Left Sidebar: Timeline Overview -->
+            <aside class="w-20 lg:w-72 glass-panel border-r border-glass-border flex flex-col hidden sm:flex shrink-0">
+                <div class="p-6 pb-2">
+                    <h2 class="text-sm font-bold text-gray-400 uppercase tracking-wider hidden lg:block">Route</h2>
+                </div>
+                <div class="flex-1 overflow-y-auto px-6 py-4 space-y-0">
+                    <!-- Timeline Item 1 -->
+                    <div class="relative pl-8 pb-8 group cursor-pointer">
+                        <div
+                            class="absolute left-2 top-2 h-full w-0.5 bg-primary/30 group-hover:bg-primary transition-colors">
+                        </div>
+                        <div
+                            class="absolute left-0 top-1 size-4 rounded-full border-2 border-primary bg-[#1b171a] z-10">
+                        </div>
+                        <div class="hidden lg:block">
+                            <h3 class="font-bold text-white group-hover:text-primary transition-colors">London</h3>
+                            <p class="text-xs text-gray-400">Oct 10 - 12</p>
+                        </div>
+                    </div>
+                    <!-- Timeline Item 2 -->
+                    <div class="relative pl-8 pb-8 group cursor-pointer">
+                        <div
+                            class="absolute left-2 top-2 h-full w-0.5 bg-gray-700 group-hover:bg-primary/50 transition-colors">
+                        </div>
+                        <div
+                            class="absolute left-0 top-1 size-4 rounded-full border-2 border-gray-600 group-hover:border-primary bg-[#1b171a] z-10">
+                        </div>
+                        <div class="hidden lg:block">
+                            <h3 class="font-bold text-white group-hover:text-primary transition-colors">Paris</h3>
+                            <p class="text-xs text-gray-400">Oct 12 - 15</p>
+                        </div>
+                    </div>
+                    <!-- Timeline Item 3 -->
+                    <div class="relative pl-8 pb-8 group cursor-pointer">
+                        <div
+                            class="absolute left-2 top-2 h-full w-0.5 bg-gray-700 group-hover:bg-primary/50 transition-colors">
+                        </div>
+                        <div
+                            class="absolute left-0 top-1 size-4 rounded-full border-2 border-gray-600 group-hover:border-primary bg-[#1b171a] z-10">
+                        </div>
+                        <div class="hidden lg:block">
+                            <h3 class="font-bold text-white group-hover:text-primary transition-colors">Rome</h3>
+                            <p class="text-xs text-gray-400">Oct 15 - 20</p>
+                        </div>
+                    </div>
+                    <!-- Timeline Add -->
+                    <div class="relative pl-8 pt-1 group cursor-pointer">
+                        <div
+                            class="absolute left-[3px] top-1.5 size-2.5 rounded-full bg-gray-600 group-hover:bg-primary z-10">
+                        </div>
+                        <div class="hidden lg:block">
+                            <span class="text-sm font-medium text-gray-500 group-hover:text-white transition-colors">+
+                                Add Stop</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Mini Stats in Sidebar -->
+                <div class="p-6 border-t border-glass-border hidden lg:block space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white/5 p-3 rounded-lg">
+                            <p class="text-xs text-gray-400">Duration</p>
+                            <p class="text-lg font-bold">15 Days</p>
+                        </div>
+                        <div class="bg-white/5 p-3 rounded-lg">
+                            <p class="text-xs text-gray-400">Stops</p>
+                            <p class="text-lg font-bold">3 Cities</p>
+                        </div>
+                    </div>
+                    <a id="btnTripBudget" href="#"
+                        class="flex items-center justify-between bg-primary/10 hover:bg-primary/20 p-3 rounded-lg transition-colors group">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-xl">account_balance_wallet</span>
+                            <span class="font-bold text-primary text-sm group-hover:text-primary-light">Trip
+                                Budget</span>
+                        </div>
+                        <span class="material-symbols-outlined text-gray-400 text-sm">arrow_forward_ios</span>
+                    </a>
+                </div>
+            </aside>
+            <!-- Center Stage: Itinerary Cards -->
+            <section class="flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-10 relative scroll-smooth">
+                <div class="max-w-4xl mx-auto space-y-8 pb-20">
+                    <!-- Stop Card 1: London -->
+                    <div class="glass-card rounded-2xl p-0 overflow-hidden group">
+                        <!-- Card Header Image -->
+                        <div class="h-32 w-full bg-cover bg-center relative"
+                            data-alt="Iconic view of London Big Ben and red bus"
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBUvOOxR9_y39E7Y40BSX8APnH4XMHzBWYVRJYwEElHM_NrjMti5xoGtj8uy8dHY4pZEMbOsFetTD3Qr0NHAinpzNKS87WCdKYp0XQBYfd8BahNcV6EN-97W-isvSkZGLUdak5TI7m3qlnL6wNkll-naq7aZ0iMgHHfbF-hv-58VyuqG-gkOKhOV5hPg_oqYTK02SYUF1Dusasm63VwrVlRZwMOtk8Q7osFs2isUXAnJal5_iCqFx7cmzpOzhXmoxvLrSSFIv3bBFh3');">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-[#1b171a] via-transparent to-transparent opacity-90">
+                            </div>
+                            <div
+                                class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button
+                                    class="size-8 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-sm">edit</span>
+                                </button>
+                                <button
+                                    class="size-8 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white hover:bg-red-500 hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-sm">delete</span>
+                                </button>
+                            </div>
+                            <div class="absolute bottom-4 left-6">
+                                <h2 class="text-3xl font-bold text-white shadow-black drop-shadow-md">London, UK</h2>
+                            </div>
+                            <!-- Drag Handle -->
+                            <div
+                                class="absolute top-1/2 left-2 -translate-y-1/2 text-white/30 hover:text-white cursor-grab active:cursor-grabbing p-2">
+                                <span class="material-symbols-outlined">drag_indicator</span>
+                            </div>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="p-6">
+                            <!-- Inputs Row -->
+                            <div class="flex flex-wrap gap-4 mb-6">
+                                <div
+                                    class="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-lg border border-white/10 hover:border-primary/50 transition-colors cursor-pointer w-full sm:w-auto">
+                                    <span class="material-symbols-outlined text-gray-400">calendar_today</span>
+                                    <span class="text-sm font-medium">Oct 10 - Oct 12</span>
+                                </div>
+                                <div
+                                    class="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-lg border border-white/10 hover:border-primary/50 transition-colors cursor-pointer w-full sm:w-auto">
+                                    <span class="material-symbols-outlined text-gray-400">hotel</span>
+                                    <span class="text-sm font-medium">The Ritz London</span>
+                                </div>
+                                <div class="ml-auto flex items-center gap-2 text-sm text-gray-400">
+                                    <span class="material-symbols-outlined text-base">nights_stay</span>
+                                    <span>2 Nights</span>
+                                </div>
+                            </div>
+                            <!-- Activities List -->
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Activities
+                                </h4>
+                                <!-- Activity Item -->
+                                <div
+                                    class="flex items-center gap-4 p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group/activity">
+                                    <div class="size-10 rounded-lg bg-cover bg-center shrink-0"
+                                        data-alt="Tower of London exterior"
+                                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNHB0YpbJAV2HaVZfUN6XmGSnQMQXILBWz8b99E9fUlqIPhvfosvfKfoyS7cxyHA3HTorbnZs4QnbPEVouStSqcJPZu8pDLRjwrGbO6-IMFVhyyllZE2kIOgIpEWhEFfsISc5p5w7NACykjBSDAsKfy9R5twu30AeXI-PupZg4eUJAgz4omii6s1R1MmvQVLQ-z_x2NebeXgweLUpGoAWgeYj23eSf_aUr5YctMNMqGY7EYY7a3Btwsoh39su936e153t8cZ0aRI-E')">
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="font-medium text-white truncate">Tower of London Tour</p>
+                                        <p class="text-xs text-gray-400 truncate">10:00 AM • Sightseeing</p>
+                                    </div>
+                                    <div
+                                        class="flex gap-2 opacity-0 group-hover/activity:opacity-100 transition-opacity">
+                                        <button class="text-gray-400 hover:text-white"><span
+                                                class="material-symbols-outlined text-lg">edit</span></button>
+                                        <button class="text-gray-400 hover:text-red-400"><span
+                                                class="material-symbols-outlined text-lg">close</span></button>
+                                    </div>
+                                </div>
+                                <!-- Activity Item -->
+                                <div
+                                    class="flex items-center gap-4 p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group/activity">
+                                    <div class="size-10 rounded-lg bg-cover bg-center shrink-0"
+                                        data-alt="Interior of a fancy restaurant"
+                                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAfahRSO5VTrHJsdC65zCNgrhqrKgu55bDNtIg4lus8SnvDQ554jGPqQitv3ZSPoRtBF7apuuTunR-iB7isafFl67V3xjvj2vneTXgTMK_B5azv4I_TL4bW8iX7YUJFV3NWVBhreEgZoPARCb8zxyqZHNz0f0THkKsC02PrW9YWk8BIk3iOMfql9E9iyS-u4FxhS1zfgbq2QNRkrus6GtH5Cub5LqMC8BFCpu0-VpIzz--4jH3fN1hCabHUXM6BPY1H6tSN63b6i-BZ')">
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="font-medium text-white truncate">Dinner at Sketch</p>
+                                        <p class="text-xs text-gray-400 truncate">7:30 PM • Dining</p>
+                                    </div>
+                                    <div
+                                        class="flex gap-2 opacity-0 group-hover/activity:opacity-100 transition-opacity">
+                                        <button class="text-gray-400 hover:text-white"><span
+                                                class="material-symbols-outlined text-lg">edit</span></button>
+                                        <button class="text-gray-400 hover:text-red-400"><span
+                                                class="material-symbols-outlined text-lg">close</span></button>
+                                    </div>
+                                </div>
+                                <button
+                                    class="w-full py-2 flex items-center justify-center gap-2 rounded-lg border border-dashed border-gray-600 text-gray-400 hover:text-primary hover:border-primary hover:bg-primary/5 transition-all mt-2">
+                                    <span class="material-symbols-outlined text-sm">add</span>
+                                    <span class="text-sm font-medium">Add Activity</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Connector Line -->
+                    <div class="flex items-center justify-center py-2 relative">
+                        <div class="absolute h-full w-px bg-gradient-to-b from-transparent via-gray-700 to-transparent">
+                        </div>
+                        <div
+                            class="z-10 bg-[#2d262d] border border-gray-600 rounded-full px-3 py-1 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-gray-400 text-sm">train</span>
+                            <span class="text-xs text-gray-300 font-medium">Eurostar • 2h 15m</span>
+                        </div>
+                    </div>
+                    <!-- Stop Card 2: Paris -->
+                    <div class="glass-card rounded-2xl p-0 overflow-hidden group">
+                        <!-- Card Header Image -->
+                        <div class="h-32 w-full bg-cover bg-center relative"
+                            data-alt="Eiffel tower view from street level"
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBgegjrQ25SU2Gc5a7bBdvINrrkEMWNl67c9xT7JE36GAG-onMWTbsIZ9SYXdai8Vbfx0TxmUCC4MoLd7QAcLGbSRaF28-mFb25Hya2AFQHFNAVzckq1OcyuMsekX86JVDsoNfk_bSB6f2r9fQHwK7wrz-16CnLOsIGUm6n7DU2XnlEAdPZ5AWxA6tJOjqbw64fmYE9JvsCFMUmNiR3scy5U5RYih0uUo3McQzyvDeHaWjGkRFBHAfflVMNgbf4KsFUnsLtxdL-TelP');">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-[#1b171a] via-transparent to-transparent opacity-90">
+                            </div>
+                            <div
+                                class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button
+                                    class="size-8 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-sm">edit</span>
+                                </button>
+                                <button
+                                    class="size-8 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white hover:bg-red-500 hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-sm">delete</span>
+                                </button>
+                            </div>
+                            <div class="absolute bottom-4 left-6">
+                                <h2 class="text-3xl font-bold text-white shadow-black drop-shadow-md">Paris, France</h2>
+                            </div>
+                            <!-- Drag Handle -->
+                            <div
+                                class="absolute top-1/2 left-2 -translate-y-1/2 text-white/30 hover:text-white cursor-grab active:cursor-grabbing p-2">
+                                <span class="material-symbols-outlined">drag_indicator</span>
+                            </div>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="p-6">
+                            <!-- Inputs Row -->
+                            <div class="flex flex-wrap gap-4 mb-6">
+                                <div
+                                    class="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-lg border border-white/10 hover:border-primary/50 transition-colors cursor-pointer w-full sm:w-auto">
+                                    <span class="material-symbols-outlined text-gray-400">calendar_today</span>
+                                    <span class="text-sm font-medium">Oct 12 - Oct 15</span>
+                                </div>
+                                <div
+                                    class="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-lg border border-white/10 hover:border-primary/50 transition-colors cursor-pointer w-full sm:w-auto">
+                                    <span class="material-symbols-outlined text-gray-400">hotel</span>
+                                    <span class="text-sm font-medium text-gray-400 italic">Select Hotel</span>
+                                </div>
+                                <div class="ml-auto flex items-center gap-2 text-sm text-gray-400">
+                                    <span class="material-symbols-outlined text-base">nights_stay</span>
+                                    <span>3 Nights</span>
+                                </div>
+                            </div>
+                            <!-- Empty State for Activities -->
+                            <div
+                                class="flex flex-col items-center justify-center py-6 border-2 border-dashed border-white/10 rounded-xl bg-white/[0.02]">
+                                <div class="size-10 rounded-full bg-white/5 flex items-center justify-center mb-2">
+                                    <span class="material-symbols-outlined text-gray-400">local_activity</span>
+                                </div>
+                                <p class="text-sm text-gray-400 mb-3">No activities planned yet</p>
+                                <button
+                                    class="px-4 py-1.5 rounded-lg bg-primary/20 text-primary-light hover:bg-primary hover:text-white text-sm font-medium transition-colors">
+                                    + Add First Activity
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Connector Line -->
+                    <div class="flex items-center justify-center py-2 relative">
+                        <div class="absolute h-full w-px bg-gradient-to-b from-transparent via-gray-700 to-transparent">
+                        </div>
+                        <div
+                            class="z-10 bg-[#2d262d] border border-gray-600 rounded-full px-3 py-1 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-gray-400 text-sm">flight</span>
+                            <span class="text-xs text-gray-300 font-medium">Air France • 2h 05m</span>
+                        </div>
+                    </div>
+                    <!-- Stop Card 3: Rome (Collapsed/Simple View) -->
+                    <div
+                        class="glass-card rounded-2xl p-4 flex items-center gap-4 group cursor-pointer hover:bg-white/5">
+                        <div class="size-16 rounded-lg bg-cover bg-center shrink-0" data-alt="Colosseum in Rome"
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAacWmbO2jNmByLoMe6hzo-uZTI0KhayhYCpAnCTV-CxUrMcm9QGBw9NRc7qZeNEsdCA6Xbt6Xg0JXsSLEp6Hu9hBfgF0UaeyLcwBgratZqPtdwhLI_7vszfig1ioxqlQ7DAlFdkC4Ihob4JTbr_E9-RtJik1lIrHv3YwyVvShZCMEGwYpUWGfIJwyj-lutgda8bc1a8XzKP1rinwfvBc-3xdrYOzDThT4Ed5Xz2vgjU3xiBO89K-bfsc97cQ24fxOt1BO7xHZeUdt1');">
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-white">Rome, Italy</h3>
+                            <p class="text-sm text-gray-400">Oct 15 - Oct 20</p>
+                        </div>
+                        <div class="text-gray-500 group-hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined">expand_more</span>
+                        </div>
+                    </div>
+                    <!-- Add Stop Placeholder -->
+                    <button
+                        class="w-full h-24 rounded-2xl border-2 border-dashed border-gray-700 hover:border-primary hover:bg-primary/5 transition-all flex flex-col items-center justify-center group cursor-pointer">
+                        <div
+                            class="size-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+                            <span
+                                class="material-symbols-outlined text-primary group-hover:text-white">add_location_alt</span>
+                        </div>
+                        <span class="text-sm font-medium text-gray-400 mt-2 group-hover:text-primary-light">Add Next
+                            Destination</span>
+                    </button>
+                </div>
+            </section>
+            <!-- Right Sidebar: Map & Details (Collapsible on smaller screens) -->
+            <aside class="w-80 glass-panel border-l border-glass-border hidden xl:flex flex-col shrink-0 relative">
+                <div class="absolute inset-0 p-4">
+                    <div class="w-full h-full rounded-xl overflow-hidden relative">
+                        <!-- Static Map Image Background -->
+                        <div class="w-full h-full bg-cover bg-center opacity-60 grayscale hover:grayscale-0 transition-all duration-500"
+                            data-alt="Map of Europe showing travel routes" data-location="Europe Map"
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB6bZ4U0Nq29zwReKdYqUnjRiLVWmFgQ-4OevcWDtD96yQs3X13wRY8cwR2uDHiv0jb8X4dchlyTzxGCXavJNKNN6koIwd0HH4Q1caSXN3-WtyMGGybtW9773ktjC4pzJIF09cXrSX7Iahuns33hzqnNnA4C72yMWK1LkVZ7v_gdT5Oy4Pvcq9QKDTDJ6KQtM8wPZiYNCvpvVy3iv9Hdc54x9gEupv9nggCnYDLsrbXWKmaYyHXSeYVzzJO8qXurbprY_wtMiNcSp1X');">
+                        </div>
+                        <!-- Map Overlay Pins -->
+                        <div
+                            class="absolute top-1/4 left-1/3 size-3 bg-primary rounded-full ring-4 ring-primary/30 animate-pulse">
+                        </div>
+                        <div class="absolute top-1/3 left-1/2 size-3 bg-primary rounded-full ring-4 ring-primary/30">
+                        </div>
+                        <div class="absolute bottom-1/3 left-2/3 size-3 bg-primary rounded-full ring-4 ring-primary/30">
+                        </div>
+                        <!-- Map Controls -->
+                        <div class="absolute bottom-4 right-4 flex flex-col gap-2">
+                            <button
+                                class="size-8 bg-black/70 backdrop-blur rounded-lg text-white hover:bg-primary flex items-center justify-center transition-colors">
+                                <span class="material-symbols-outlined text-sm">add</span>
+                            </button>
+                            <button
+                                class="size-8 bg-black/70 backdrop-blur rounded-lg text-white hover:bg-primary flex items-center justify-center transition-colors">
+                                <span class="material-symbols-outlined text-sm">remove</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+        <!-- Floating Action Button (Mobile Only) -->
+        <button
+            class="lg:hidden fixed bottom-6 right-6 size-14 bg-primary text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center z-50 hover:scale-105 transition-transform">
+            <span class="material-symbols-outlined">add</span>
+        </button>
+    </div>
+    <!-- Search Modal -->
+    <div id="searchModal" class="fixed inset-0 z-[100] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeSearchModal()">
+        </div>
+        <!-- Modal Content -->
+        <div
+            class="absolute inset-x-4 top-[10%] max-w-2xl mx-auto glass-panel rounded-xl overflow-hidden shadow-2xl animate-in fade-in slide-in-from-bottom-4 bg-[#1b171a]">
+            <!-- Header -->
+            <div class="p-4 border-b border-white/10 flex items-center gap-4">
+                <span class="material-symbols-outlined text-primary text-2xl">search</span>
+                <input id="searchInput" type="text" placeholder="Search..."
+                    class="bg-transparent border-none text-white placeholder-gray-500 focus:ring-0 w-full text-lg outline-none"
+                    autocomplete="off">
+                <button onclick="closeSearchModal()" class="text-gray-400 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-2xl">close</span>
+                </button>
+            </div>
+            <!-- Filters (Optional - hidden by default unless needed) -->
+            <div id="searchFilters" class="px-4 py-2 border-b border-white/5 flex gap-2 hidden">
+                <!-- Dynamic filters injected here -->
+            </div>
+            <!-- Results -->
+            <div id="searchResults" class="max-h-[60vh] overflow-y-auto p-4 space-y-2 min-h-[200px]">
+                <div class="flex flex-col items-center justify-center h-full text-gray-500">
+                    <span class="material-symbols-outlined text-4xl mb-2 opacity-50">travel_explore</span>
+                    <p>Type to search...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="itinerary.js"></script>
+</body>
+
+</html>
