@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GlobeTrotter - Sign Up</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#714b67",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#1b171a",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(27, 23, 26, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body class="font-display bg-background-dark text-white antialiased">
+    <div class="relative flex min-h-screen w-full flex-col overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div
+                class="absolute inset-0 bg-gradient-to-b from-black/40 via-background-dark/40 to-background-dark/90 z-10">
+            </div>
+            <div class="h-full w-full bg-cover bg-center transition-transform duration-[20s] hover:scale-105"
+                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDSxYS_8ZU7CsCRdRizMo2DTWNz21iRUhYyAjYQy_JnMmCkvnXVAcqKLqkhZSIdDbMbXTRu6QwqtE0NMtT_7d-MhsA_K3aXoL7n9I807hkzG5L5V8ffqEbfLFLPz1OvhoNA_5YjSMViur0Lg2kd8BI8W79m7-2rtgkBhvHqXsLo5bKKU-H6rp6S3Z76C6LftN0gDhQMGLT3Qfix4pxlIjZNsOZoXETDZsvCsnbjzCYu-2SI4yKN2qLZB0653IOjVDSLGc5XuEVBgXjE");'>
+            </div>
+        </div>
+        <div class="relative z-10 flex flex-1 items-center justify-center px-4 py-10">
+            <div
+                class="glass-card w-full max-w-[480px] overflow-hidden rounded-2xl shadow-2xl transition-all duration-300">
+                <div class="flex flex-col p-8 md:p-10">
+                    <div class="mb-8 flex flex-col items-center text-center">
+                        <div
+                            class="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-white shadow-lg shadow-primary/30">
+                            <svg class="h-8 w-8" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <path clip-rule="evenodd"
+                                    d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z"
+                                    fill="currentColor" fill-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold leading-tight tracking-tight text-white md:text-3xl">GlobeTrotter
+                        </h2>
+                        <p class="mt-2 text-sm text-[#aea7ac]">Create an account to start planning.</p>
+                    </div>
+                    <form class="flex flex-col gap-5">
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium leading-normal text-[#aea7ac]">Full Name</label>
+                            <div
+                                class="glass-input group flex items-center rounded-lg px-3 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+                                <span
+                                    class="material-symbols-outlined text-[#aea7ac] group-focus-within:text-primary transition-colors">person</span>
+                                <input id="fullName"
+                                    class="form-input h-12 w-full border-none bg-transparent px-3 text-white placeholder:text-[#aea7ac]/50 focus:ring-0 text-sm md:text-base"
+                                    placeholder="John Doe" type="text" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium leading-normal text-[#aea7ac]">Email Address</label>
+                            <div
+                                class="glass-input group flex items-center rounded-lg px-3 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+                                <span
+                                    class="material-symbols-outlined text-[#aea7ac] group-focus-within:text-primary transition-colors">mail</span>
+                                <input id="email"
+                                    class="form-input h-12 w-full border-none bg-transparent px-3 text-white placeholder:text-[#aea7ac]/50 focus:ring-0 text-sm md:text-base"
+                                    placeholder="name@example.com" type="email" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium leading-normal text-[#aea7ac]">Password</label>
+                            <div
+                                class="glass-input group flex items-center rounded-lg px-3 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+                                <span
+                                    class="material-symbols-outlined text-[#aea7ac] group-focus-within:text-primary transition-colors">lock</span>
+                                <input id="password"
+                                    class="form-input h-12 w-full border-none bg-transparent px-3 text-white placeholder:text-[#aea7ac]/50 focus:ring-0 text-sm md:text-base"
+                                    placeholder="Create a password" type="password" />
+                            </div>
+                        </div>
+                        <button id="signupBtn"
+                            class="mt-2 flex h-12 w-full cursor-pointer items-center justify-center rounded-lg bg-primary text-sm font-bold tracking-wide text-white transition-all hover:bg-[#855979] hover:shadow-lg hover:shadow-primary/25 active:scale-[0.98]"
+                            type="button">
+                            Sign Up
+                        </button>
+                    </form>
+                    <div class="mt-8 text-center">
+                        <p class="text-sm text-[#aea7ac]">
+                            Already have an account?
+                            <a class="font-bold text-primary hover:text-white transition-colors" href="code.html">Log
+                                in</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('signupBtn').addEventListener('click', async () => {
+            const full_name = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!full_name || !email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ full_name, email, password })
+                });
+
+                if (response.ok) {
+                    alert('Account created successfully! Please log in.');
+                    window.location.href = 'code.html';
+                } else {
+                    const error = await response.json();
+                    alert(error.detail || 'Signup failed');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred. Make sure the backend is running.');
+            }
+        });
+    </script>
+</body>
+
+</html>

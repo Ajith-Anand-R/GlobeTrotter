@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GlobeTrotter - Itinerary View</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#714b67",
+              "primary-light": "#8e6584",
+              "background-light": "#f7f7f7",
+              "background-dark": "#1b171a", // Deep charcoal
+              "glass-surface": "rgba(255, 255, 255, 0.05)",
+              "glass-border": "rgba(255, 255, 255, 0.1)",
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+            backdropBlur: {
+                'xs': '2px',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2); 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3); 
+        }
+        
+        .glass-panel {
+            background: rgba(30, 30, 30, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-panel-light {
+             background: rgba(255, 255, 255, 0.03);
+             border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Abstract background gradient mesh */
+        .bg-mesh {
+            background-color: #151415;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(293,33%,24%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(290,20%,15%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 100%, hsla(280,30%,20%,1) 0, transparent 50%), 
+                radial-gradient(at 0% 100%, hsla(300,25%,18%,1) 0, transparent 50%);
+        }
+    </style>
+</head>
+<body class="font-display text-white bg-mesh min-h-screen relative overflow-x-hidden selection:bg-primary selection:text-white">
+<!-- Top Navigation -->
+<nav class="sticky top-0 z-50 w-full glass-panel border-b-0 border-b-white/10">
+<div class="px-6 md:px-10 py-4 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<!-- Logo -->
+<div class="flex items-center gap-3 text-white">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold tracking-tight">GlobeTrotter</h2>
+</div>
+<!-- Search -->
+<label class="hidden md:flex flex-col min-w-40 h-10 w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full glass-panel-light">
+<div class="text-white/50 flex items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-white/30 px-3 text-sm font-normal" placeholder="Search itinerary..."/>
+</div>
+</label>
+</div>
+<!-- Nav Links -->
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center gap-8">
+<a class="text-white text-sm font-medium hover:text-primary-light transition-colors" href="#">Trips</a>
+<a class="text-white text-sm font-medium hover:text-primary-light transition-colors" href="#">Destinations</a>
+<a class="text-white text-sm font-medium hover:text-primary-light transition-colors" href="#">Community</a>
+</div>
+<div class="h-8 w-[1px] bg-white/10 hidden lg:block"></div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center h-10 w-10 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full"></span>
+</button>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 border border-white/10 cursor-pointer" data-alt="User profile avatar showing a smiling person" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDIcJD5B_ZULqOMhgOjS4Gwly9j8G5iiLSIJPWTQm3Q0qvNCA6kl9q9Ttew41X6mu3PyQFMKVgjytNDLuQNiSTB0NWsrObiHhE7gakffwEzR-pEuxrtlcCR97r0_U4KgUUp48Jeq16s8Q_bKx6xJv7dFyfhgM82oDp3TdrB1pYoBLGW1xTacNBI4H0xm8Hr6We1cwSdwgZKTblLWnBZBBm3BGEGz8ShsaOdSxNvUyX3SZakp_6CX_8VBMEEPzZX2GS6zyXq3uEGYt87");'></div>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Header & Controls Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+<!-- Trip Title & Stats -->
+<div class="lg:col-span-12">
+<div class="glass-panel rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-end justify-between gap-6 relative overflow-hidden">
+<!-- Subtle decorative gradient inside card -->
+<div class="absolute -top-24 -right-24 size-64 bg-primary/20 rounded-full blur-[80px] pointer-events-none"></div>
+<div class="relative z-10 space-y-2">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/30 text-primary-light border border-primary/20 uppercase tracking-wider">Confirmed</span>
+<span class="text-white/50 text-xs font-medium uppercase tracking-wider">Ref: #TR-8821</span>
+</div>
+<h1 class="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">Summer in Kyoto &amp; Tokyo</h1>
+<p class="text-white/60 text-base md:text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span> Oct 12 - Oct 20, 2024 
+                            <span class="w-1 h-1 rounded-full bg-white/30 mx-1"></span>
+<span class="material-symbols-outlined text-[18px]">group</span> 2 Travelers
+                        </p>
+</div>
+<div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-end gap-4">
+<div class="text-right hidden sm:block">
+<p class="text-white/40 text-sm font-medium uppercase">Est. Cost</p>
+<p class="text-2xl font-bold text-white">$3,450</p>
+</div>
+<div class="flex gap-3">
+<button class="glass-panel-light hover:bg-white/10 transition-colors h-10 px-4 rounded-lg flex items-center gap-2 text-sm font-semibold text-white">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+                                Share
+                            </button>
+<button class="bg-primary hover:bg-[#5e3e55] transition-colors h-10 px-5 rounded-lg flex items-center gap-2 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(113,75,103,0.4)]">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                                Edit Trip
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Layout: Timeline (Left) vs Sidebar (Right) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left Column: Itinerary Feed -->
+<div class="lg:col-span-8 flex flex-col gap-8">
+<!-- View Controls -->
+<div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-transparent">
+<!-- Segmented Control -->
+<div class="bg-background-dark/50 p-1 rounded-xl flex items-center glass-panel-light backdrop-blur-sm">
+<button class="px-4 py-2 rounded-lg bg-primary/80 shadow text-white text-sm font-medium flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">list</span>
+                            List View
+                        </button>
+<button class="px-4 py-2 rounded-lg text-white/50 hover:text-white hover:bg-white/5 text-sm font-medium flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">calendar_view_month</span>
+                            Calendar
+                        </button>
+</div>
+<!-- Filter/Sort -->
+<div class="flex items-center gap-2">
+<button class="text-sm font-medium text-white/70 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5 flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span> Filter
+                        </button>
+</div>
+</div>
+<!-- Day 1 Card -->
+<div class="relative group">
+<div class="absolute -left-[1px] top-8 bottom-0 w-[2px] bg-white/10 lg:block hidden"></div>
+<!-- Day Header -->
+<div class="glass-panel rounded-2xl overflow-hidden mb-4 transition-transform hover:-translate-y-1 duration-300">
+<div class="h-40 bg-cover bg-center relative" data-alt="Skyline of Tokyo city with Tokyo Tower visible at dusk" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDS1FsJehoniVOsgb56Ql1k3qDFXc701mbvMiW6RyzDv_EOQfyfeKiz_gOEZu11f58bWIQXXN3uVNOacT6P0-o2HkHsndzEWjbV4sgkytpSmQtpacePryViud-vKDcx8N1lsxpyK0EPqDu-7XjA8TY4-VHyCLE1qYJei3ZjbBBchmu04Vv3lmOXy6IAkH-qWTmfE-36t84hvF8oMYjWPZY7dh24TPMmIwwXsBkdvkd3NdNip8I8Q0xqW_qPOxuUX0-0OC7j0hTANTRm");'>
+<div class="absolute inset-0 bg-gradient-to-t from-[#151415] via-[#151415]/60 to-transparent"></div>
+<div class="absolute bottom-0 left-0 right-0 p-6 flex justify-between items-end">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-white/20 backdrop-blur-md text-white border border-white/10 uppercase tracking-wider">Day 1</span>
+<span class="text-white/80 text-sm font-medium">Oct 12</span>
+</div>
+<h3 class="text-2xl font-bold text-white">Arrival in Tokyo</h3>
+</div>
+<!-- Weather Widget -->
+<div class="glass-panel-light rounded-lg p-2 px-3 flex items-center gap-2 backdrop-blur-md">
+<span class="material-symbols-outlined text-yellow-400">partly_cloudy_day</span>
+<div>
+<p class="text-xs text-white/60 font-medium">Tokyo</p>
+<p class="text-sm font-bold text-white">19°C</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline -->
+<div class="pl-0 lg:pl-6 space-y-4">
+<!-- Item 1 -->
+<div class="glass-panel p-5 rounded-xl flex gap-4 hover:bg-white/10 transition-colors cursor-pointer group/item">
+<div class="flex flex-col items-center gap-2 pt-1 min-w-[60px]">
+<span class="text-sm font-bold text-white">10:00</span>
+<span class="text-xs text-white/40 uppercase font-medium">AM</span>
+</div>
+<div class="w-[1px] bg-white/10 relative my-1">
+<div class="absolute top-2 -left-[5px] size-[11px] rounded-full border-2 border-[#714b67] bg-[#151415]"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-lg font-semibold text-white group-hover/item:text-primary-light transition-colors">Land at Narita Airport</h4>
+<span class="material-symbols-outlined text-white/30 text-[20px]">flight_land</span>
+</div>
+<p class="text-white/60 text-sm mb-3">Flight JL005 • Terminal 2</p>
+<div class="flex gap-2">
+<span class="text-xs px-2 py-1 rounded bg-white/5 text-white/60 border border-white/5">Confirmation #88392</span>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="glass-panel p-5 rounded-xl flex gap-4 hover:bg-white/10 transition-colors cursor-pointer group/item">
+<div class="flex flex-col items-center gap-2 pt-1 min-w-[60px]">
+<span class="text-sm font-bold text-white">12:00</span>
+<span class="text-xs text-white/40 uppercase font-medium">PM</span>
+</div>
+<div class="w-[1px] bg-white/10 relative my-1">
+<div class="absolute top-2 -left-[5px] size-[11px] rounded-full border-2 border-[#714b67] bg-[#151415]"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-lg font-semibold text-white group-hover/item:text-primary-light transition-colors">Check-in at Hotel Gracery</h4>
+<span class="material-symbols-outlined text-white/30 text-[20px]">hotel</span>
+</div>
+<p class="text-white/60 text-sm mb-3">Shinjuku Ward</p>
+<div class="flex items-center gap-4 text-sm text-white/50">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">attach_money</span> Paid</span>
+<span class="flex items-center gap-1 hover:text-primary cursor-pointer transition-colors"><span class="material-symbols-outlined text-[16px]">map</span> View Map</span>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="glass-panel p-5 rounded-xl flex gap-4 hover:bg-white/10 transition-colors cursor-pointer group/item border-l-4 border-l-primary">
+<div class="flex flex-col items-center gap-2 pt-1 min-w-[60px]">
+<span class="text-sm font-bold text-white">06:00</span>
+<span class="text-xs text-white/40 uppercase font-medium">PM</span>
+</div>
+<div class="w-[1px] bg-white/10 relative my-1">
+<div class="absolute top-2 -left-[5px] size-[11px] rounded-full border-2 border-[#714b67] bg-[#151415]"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-lg font-semibold text-white group-hover/item:text-primary-light transition-colors">Dinner at Omoide Yokocho</h4>
+<span class="material-symbols-outlined text-white/30 text-[20px]">restaurant</span>
+</div>
+<p class="text-white/60 text-sm mb-3">Yakitori Alley</p>
+<div class="flex flex-wrap gap-2">
+<span class="text-xs px-2 py-1 rounded bg-primary/20 text-primary-light border border-primary/20">Reservation: 6:00 PM</span>
+<span class="text-xs px-2 py-1 rounded bg-white/5 text-white/60 border border-white/5">Est. $40</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Day 2 Card -->
+<div class="relative group mt-4">
+<div class="absolute -left-[1px] top-8 bottom-0 w-[2px] bg-white/10 lg:block hidden"></div>
+<!-- Day Header -->
+<div class="glass-panel rounded-2xl overflow-hidden mb-4 transition-transform hover:-translate-y-1 duration-300">
+<div class="h-40 bg-cover bg-center relative" data-alt="Traditional Japanese garden in Kyoto with autumn colors" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBVmWukF_fn5P6AyDkMAoFMbMx-1gLB1czHEjNNia0aDX3mgVvea_4VVvBarCVtStRzG-ByUYHTwcyQNOx_7kGiWp6n3_ooFkYVXvwqC1k9A_NL0OR5bIeUK9qs7-Z0sPP3PvhqI1BHQ2n5tCSqIyqiz16VAEfgxyDOBLKUCEXy56_WeTTwnRSdJejw1D2rG04FonOE0DnmNec0N8AK9_BHHNlKVxM6ZfiCJ9M2LXKf06x-Z02ZIxuTMcHH-uMLqjjb7cM7_uT-NbVY");'>
+<div class="absolute inset-0 bg-gradient-to-t from-[#151415] via-[#151415]/60 to-transparent"></div>
+<div class="absolute bottom-0 left-0 right-0 p-6 flex justify-between items-end">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-white/20 backdrop-blur-md text-white border border-white/10 uppercase tracking-wider">Day 2</span>
+<span class="text-white/80 text-sm font-medium">Oct 13</span>
+</div>
+<h3 class="text-2xl font-bold text-white">Exploring Shinjuku</h3>
+</div>
+<div class="glass-panel-light rounded-lg p-2 px-3 flex items-center gap-2 backdrop-blur-md">
+<span class="material-symbols-outlined text-white">sunny</span>
+<div>
+<p class="text-xs text-white/60 font-medium">Tokyo</p>
+<p class="text-sm font-bold text-white">21°C</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline -->
+<div class="pl-0 lg:pl-6 space-y-4">
+<!-- Item 1 -->
+<div class="glass-panel p-5 rounded-xl flex gap-4 hover:bg-white/10 transition-colors cursor-pointer group/item">
+<div class="flex flex-col items-center gap-2 pt-1 min-w-[60px]">
+<span class="text-sm font-bold text-white">09:00</span>
+<span class="text-xs text-white/40 uppercase font-medium">AM</span>
+</div>
+<div class="w-[1px] bg-white/10 relative my-1">
+<div class="absolute top-2 -left-[5px] size-[11px] rounded-full border-2 border-[#714b67] bg-[#151415]"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-lg font-semibold text-white group-hover/item:text-primary-light transition-colors">Gyoen National Garden</h4>
+<span class="material-symbols-outlined text-white/30 text-[20px]">nature_people</span>
+</div>
+<p class="text-white/60 text-sm mb-3">Walking tour</p>
+<div class="flex gap-2">
+<span class="text-xs px-2 py-1 rounded bg-white/5 text-white/60 border border-white/5">Entry: $5</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Sidebar (Sticky) -->
+<div class="lg:col-span-4 lg:sticky lg:top-24 flex flex-col gap-6">
+<!-- Map Widget -->
+<div class="glass-panel rounded-2xl overflow-hidden p-1 flex flex-col h-[300px]">
+<div class="flex-1 rounded-xl bg-cover bg-center relative" data-alt="Map view of Tokyo streets with route markers" data-location="Tokyo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA36ydXf_vRbisn51F8JrinwnohvSKUVYbP7k1bb-EiLf07N1AOkSf5-LLQvIE0R5PU0NWQIhc3jLhIhN_zDeold2rlmNpcqgbVTzl2e9O9Ch5kSjJhELxS76VCMxVyphV85S8NGPAK7pdMTt4HTfxJVMCFFnY9THRbEP2kIOKKrBa77w7_vSiHaQIB801lTb4SVG1sdn7bun_lf3cz5mQ2Vev6e6MoAlrqEX2J5Axg1cg3apKO-FoprVL9O6rxOWY_FS6X3qMZvXko");'>
+<!-- Fake Map Controls -->
+<div class="absolute top-3 right-3 flex flex-col gap-2">
+<button class="size-8 bg-white/90 rounded text-black flex items-center justify-center shadow-lg hover:bg-white"><span class="material-symbols-outlined text-[18px]">add</span></button>
+<button class="size-8 bg-white/90 rounded text-black flex items-center justify-center shadow-lg hover:bg-white"><span class="material-symbols-outlined text-[18px]">remove</span></button>
+</div>
+<!-- Location Pin -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary drop-shadow-lg animate-bounce">
+<span class="material-symbols-outlined text-[40px] fill-current">location_on</span>
+</div>
+<div class="absolute bottom-3 left-3 bg-white/90 text-black text-xs font-bold px-3 py-1.5 rounded shadow">
+                            Show Route
+                        </div>
+</div>
+</div>
+<!-- Trip Progress -->
+<div class="glass-panel rounded-2xl p-6">
+<h3 class="text-lg font-bold text-white mb-4">Trip Progress</h3>
+<div class="flex items-center gap-4 mb-2">
+<div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full w-[15%] bg-primary rounded-full"></div>
+</div>
+<span class="text-sm font-medium text-white">15%</span>
+</div>
+<p class="text-xs text-white/50">2 days completed of 9 days</p>
+</div>
+<!-- Budget Tracker -->
+<div class="glass-panel rounded-2xl p-6">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-lg font-bold text-white">Budget</h3>
+<button class="text-xs text-primary-light hover:text-white transition-colors">View Details</button>
+</div>
+<div class="flex items-end gap-2 h-24 mb-4">
+<!-- Bars -->
+<div class="w-1/5 bg-white/10 rounded-t h-[40%] hover:bg-primary/50 transition-colors relative group">
+<div class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded whitespace-nowrap">$450</div>
+</div>
+<div class="w-1/5 bg-primary/80 rounded-t h-[75%] hover:bg-primary transition-colors relative group">
+<div class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded whitespace-nowrap">$1200</div>
+</div>
+<div class="w-1/5 bg-white/10 rounded-t h-[30%] hover:bg-primary/50 transition-colors relative group"></div>
+<div class="w-1/5 bg-white/10 rounded-t h-[50%] hover:bg-primary/50 transition-colors relative group"></div>
+<div class="w-1/5 bg-white/10 rounded-t h-[20%] hover:bg-primary/50 transition-colors relative group"></div>
+</div>
+<div class="flex justify-between text-xs text-white/40">
+<span>Flight</span>
+<span>Hotel</span>
+<span>Food</span>
+<span>Activity</span>
+<span>Other</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Action Button -->
+<button class="fixed bottom-8 right-8 size-14 rounded-full bg-primary hover:bg-[#5e3e55] text-white shadow-[0_4px_20px_rgba(113,75,103,0.6)] flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-50 group">
+<span class="material-symbols-outlined text-[28px] group-hover:rotate-90 transition-transform duration-300">add</span>
+</button>
+</body></html>

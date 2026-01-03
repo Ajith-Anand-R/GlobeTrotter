@@ -1,0 +1,36 @@
+# Python-specific
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Database
+*.db
+*.db.bak
+*.sqlite3
+
+# Logs
+*.log
+server_pid.txt
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Project-specific ignored files from root
+globetrotter.db
+server.log
+server_pg.log
+server_debug.log
+server_stdout.log
+server_stderr.log
+server_pid.txt
+backend/globetrotter.db

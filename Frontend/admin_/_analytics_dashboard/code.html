@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GlobeTrotter Admin Dashboard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#714b67",
+                        "background-light": "#f7f7f7", // Kept for config compliance, but using dark heavily
+                        "background-dark": "#0f0f12", // Custom dark bg for deep theme
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                        "glass-surface": "rgba(255, 255, 255, 0.03)",
+                        "glass-surface-hover": "rgba(255, 255, 255, 0.06)",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px" },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.36)',
+                        'glow': '0 0 20px rgba(113, 75, 103, 0.3)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Scrollbar for that premium feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f12; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #714b67; 
+        }
+        
+        .glass-panel {
+            background: rgba(30, 30, 35, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(113, 75, 103, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-white font-display overflow-hidden antialiased selection:bg-primary selection:text-white">
+<div class="flex h-screen w-full overflow-hidden">
+<!-- SideNavBar -->
+<aside class="w-20 lg:w-72 flex-shrink-0 flex flex-col h-full glass-panel z-50 border-r border-glass-border">
+<div class="h-20 flex items-center gap-3 px-6 lg:px-8 border-b border-glass-border">
+<div class="size-10 rounded-xl bg-gradient-to-br from-primary to-purple-900 flex items-center justify-center shadow-glow">
+<span class="material-symbols-outlined text-white text-2xl">flight_takeoff</span>
+</div>
+<div class="hidden lg:flex flex-col">
+<h1 class="text-white text-lg font-bold tracking-tight">GlobeTrotter</h1>
+<p class="text-gray-400 text-xs font-medium uppercase tracking-wider">Admin</p>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary shadow-glow transition-all group" href="#">
+<span class="material-symbols-outlined text-white group-hover:scale-110 transition-transform">dashboard</span>
+<span class="hidden lg:block text-sm font-semibold">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-glass-surface-hover transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">group</span>
+<span class="hidden lg:block text-sm font-medium">Users</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-glass-surface-hover transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">map</span>
+<span class="hidden lg:block text-sm font-medium">Trips</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-glass-surface-hover transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">analytics</span>
+<span class="hidden lg:block text-sm font-medium">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-glass-surface-hover transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">paid</span>
+<span class="hidden lg:block text-sm font-medium">Revenue</span>
+</a>
+<div class="pt-4 mt-4 border-t border-glass-border">
+<p class="hidden lg:block px-4 text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Settings</p>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-glass-surface-hover transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<span class="hidden lg:block text-sm font-medium">Platform</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-glass-surface-hover transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">support_agent</span>
+<span class="hidden lg:block text-sm font-medium">Support</span>
+</a>
+</div>
+</nav>
+<div class="p-4 border-t border-glass-border">
+<div class="flex items-center gap-3 p-2 rounded-xl bg-glass-surface hover:bg-glass-surface-hover cursor-pointer transition-colors">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Admin user profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCS-189Zmks3LHv8IuK1xWab6zYyYJkzC7BgZpEOOQMLinnWtAuLvTuN2_FMl0JCBm7KCytZsitr1OsLubapil_TgWwFs-EqX32sOe2jqQq60kkiuzX7qq22Rq38oGUSgdNtWa6j3ab87_47WVGIsGsliSlU1Q6W_cGfGian3DNWA1A4qKIbChVaNSC1Rt80evVzwm8xL5TSTQpEW-fdkxW_ijXFAHzbq6G5uq0HNRUk0lzzX8bYQEL-mzSPFVohDK3qxA1furCDtEW');"></div>
+<div class="hidden lg:block overflow-hidden">
+<p class="text-sm font-bold text-white truncate">Marcus Chen</p>
+<p class="text-xs text-gray-400 truncate">Super Admin</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 ml-auto hidden lg:block">expand_more</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Background Decoration (Orbs) -->
+<div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+<!-- TopNavBar -->
+<header class="h-20 flex-shrink-0 flex items-center justify-between px-6 lg:px-10 border-b border-glass-border glass-panel z-40 sticky top-0">
+<div class="flex flex-col justify-center">
+<h2 class="text-xl font-bold text-white tracking-tight">Dashboard Overview</h2>
+<p class="text-xs text-gray-400">Welcome back to GlobeTrotter Admin</p>
+</div>
+<div class="flex items-center gap-4 lg:gap-6">
+<!-- Search -->
+<div class="hidden md:flex items-center h-10 bg-glass-surface rounded-lg px-3 border border-glass-border focus-within:border-primary/50 focus-within:bg-glass-surface-hover transition-all w-64">
+<span class="material-symbols-outlined text-gray-400 text-xl">search</span>
+<input class="bg-transparent border-none text-sm text-white placeholder-gray-500 focus:ring-0 w-full ml-2" placeholder="Search data..." type="text"/>
+</div>
+<button class="relative p-2 rounded-lg text-gray-400 hover:text-white hover:bg-glass-surface-hover transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-[#0f0f12]"></span>
+</button>
+<button class="hidden sm:flex items-center justify-center h-10 px-4 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-lg shadow-glow transition-all">
+<span class="material-symbols-outlined text-lg mr-2">add</span>
+                        New Report
+                    </button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-6 lg:p-10 scroll-smooth">
+<div class="max-w-7xl mx-auto flex flex-col gap-8">
+<!-- Date Filter Row -->
+<div class="flex justify-between items-center">
+<h3 class="text-white text-lg font-bold">Key Metrics</h3>
+<div class="flex bg-glass-surface rounded-lg p-1 border border-glass-border">
+<button class="px-3 py-1 text-xs font-medium text-white bg-primary rounded shadow-sm">Today</button>
+<button class="px-3 py-1 text-xs font-medium text-gray-400 hover:text-white transition-colors">Week</button>
+<button class="px-3 py-1 text-xs font-medium text-gray-400 hover:text-white transition-colors">Month</button>
+<button class="px-3 py-1 text-xs font-medium text-gray-400 hover:text-white transition-colors">Year</button>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Stat Card 1 -->
+<div class="glass-card p-6 rounded-2xl flex flex-col justify-between h-40 relative overflow-hidden group">
+<div class="absolute right-[-20px] top-[-20px] bg-primary/10 w-24 h-24 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors"></div>
+<div class="flex justify-between items-start z-10">
+<div>
+<p class="text-gray-400 text-sm font-medium">Total Users</p>
+<h4 class="text-3xl font-bold text-white mt-1">12,450</h4>
+</div>
+<div class="p-2 bg-glass-surface rounded-lg text-primary">
+<span class="material-symbols-outlined">group</span>
+</div>
+</div>
+<div class="flex items-center gap-2 mt-auto z-10">
+<span class="flex items-center text-emerald-400 text-xs font-bold bg-emerald-400/10 px-2 py-1 rounded">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span> +12.5%
+                                </span>
+<span class="text-gray-500 text-xs">vs last month</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="glass-card p-6 rounded-2xl flex flex-col justify-between h-40 relative overflow-hidden group">
+<div class="absolute right-[-20px] top-[-20px] bg-blue-500/10 w-24 h-24 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-colors"></div>
+<div class="flex justify-between items-start z-10">
+<div>
+<p class="text-gray-400 text-sm font-medium">Active Trips</p>
+<h4 class="text-3xl font-bold text-white mt-1">342</h4>
+</div>
+<div class="p-2 bg-glass-surface rounded-lg text-blue-400">
+<span class="material-symbols-outlined">flight</span>
+</div>
+</div>
+<div class="flex items-center gap-2 mt-auto z-10">
+<span class="flex items-center text-emerald-400 text-xs font-bold bg-emerald-400/10 px-2 py-1 rounded">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span> +5.2%
+                                </span>
+<span class="text-gray-500 text-xs">vs last month</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="glass-card p-6 rounded-2xl flex flex-col justify-between h-40 relative overflow-hidden group">
+<div class="absolute right-[-20px] top-[-20px] bg-yellow-500/10 w-24 h-24 rounded-full blur-2xl group-hover:bg-yellow-500/20 transition-colors"></div>
+<div class="flex justify-between items-start z-10">
+<div>
+<p class="text-gray-400 text-sm font-medium">Revenue</p>
+<h4 class="text-3xl font-bold text-white mt-1">$45.2k</h4>
+</div>
+<div class="p-2 bg-glass-surface rounded-lg text-yellow-400">
+<span class="material-symbols-outlined">attach_money</span>
+</div>
+</div>
+<div class="flex items-center gap-2 mt-auto z-10">
+<span class="flex items-center text-emerald-400 text-xs font-bold bg-emerald-400/10 px-2 py-1 rounded">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span> +8.4%
+                                </span>
+<span class="text-gray-500 text-xs">vs last month</span>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="glass-card p-6 rounded-2xl flex flex-col justify-between h-40 relative overflow-hidden group">
+<div class="absolute right-[-20px] top-[-20px] bg-purple-500/10 w-24 h-24 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-colors"></div>
+<div class="flex justify-between items-start z-10">
+<div>
+<p class="text-gray-400 text-sm font-medium">New Signups</p>
+<h4 class="text-3xl font-bold text-white mt-1">1,205</h4>
+</div>
+<div class="p-2 bg-glass-surface rounded-lg text-purple-400">
+<span class="material-symbols-outlined">person_add</span>
+</div>
+</div>
+<div class="flex items-center gap-2 mt-auto z-10">
+<span class="flex items-center text-red-400 text-xs font-bold bg-red-400/10 px-2 py-1 rounded">
+<span class="material-symbols-outlined text-sm mr-1">trending_down</span> -2.1%
+                                </span>
+<span class="text-gray-500 text-xs">vs last month</span>
+</div>
+</div>
+</div>
+<!-- Main Chart & Map Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Chart Area -->
+<div class="glass-card rounded-2xl p-6 lg:col-span-2 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="text-white text-lg font-bold">Trip Volume Trends</h3>
+<p class="text-gray-400 text-xs">Trips created vs Completed over time</p>
+</div>
+<button class="p-2 hover:bg-glass-surface rounded-lg transition-colors">
+<span class="material-symbols-outlined text-gray-400">more_horiz</span>
+</button>
+</div>
+<!-- CSS-only simulated chart -->
+<div class="flex-1 w-full min-h-[300px] flex items-end justify-between gap-2 px-2 relative">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+<div class="border-b border-glass-border w-full h-0"></div>
+<div class="border-b border-glass-border w-full h-0"></div>
+<div class="border-b border-glass-border w-full h-0"></div>
+<div class="border-b border-glass-border w-full h-0"></div>
+<div class="border-b border-glass-border w-full h-0"></div>
+</div>
+<!-- Bars (Simulating data) -->
+<!-- We alternate heights to make it look like data -->
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t-sm h-[40%] transition-all relative group cursor-pointer">
+<div class="hidden group-hover:block absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs p-1 rounded">40%</div>
+</div>
+<div class="w-full bg-primary/30 hover:bg-primary/50 rounded-t-sm h-[55%] transition-all relative group cursor-pointer"></div>
+<div class="w-full bg-primary/40 hover:bg-primary/60 rounded-t-sm h-[35%] transition-all relative group cursor-pointer"></div>
+<div class="w-full bg-primary/50 hover:bg-primary/70 rounded-t-sm h-[60%] transition-all relative group cursor-pointer"></div>
+<div class="w-full bg-primary/60 hover:bg-primary/80 rounded-t-sm h-[75%] transition-all relative group cursor-pointer"></div>
+<div class="w-full bg-primary/70 hover:bg-primary/90 rounded-t-sm h-[50%] transition-all relative group cursor-pointer"></div>
+<div class="w-full bg-primary hover:bg-primary rounded-t-sm h-[85%] transition-all relative group cursor-pointer shadow-[0_0_15px_rgba(113,75,103,0.5)]">
+<div class="hidden group-hover:block absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs p-1 rounded">85%</div>
+</div>
+<div class="w-full bg-primary/70 hover:bg-primary/90 rounded-t-sm h-[65%] transition-all relative group cursor-pointer"></div>
+<div class="w-full bg-primary/60 hover:bg-primary/80 rounded-t-sm h-[55%] transition-all relative group cursor-pointer"></div>
+<div class="w-full bg-primary/50 hover:bg-primary/70 rounded-t-sm h-[70%] transition-all relative group cursor-pointer"></div>
+<div class="w-full bg-primary/40 hover:bg-primary/60 rounded-t-sm h-[45%] transition-all relative group cursor-pointer"></div>
+<div class="w-full bg-primary/30 hover:bg-primary/50 rounded-t-sm h-[60%] transition-all relative group cursor-pointer"></div>
+</div>
+<div class="flex justify-between mt-4 text-xs text-gray-500 font-medium px-1">
+<span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+</div>
+</div>
+<!-- Map Card -->
+<div class="glass-card rounded-2xl p-6 flex flex-col h-full">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-white text-lg font-bold">Global Hotspots</h3>
+<button class="text-xs text-primary font-medium hover:text-white transition-colors">View All</button>
+</div>
+<div class="relative flex-1 rounded-xl overflow-hidden group">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Dark map of the world with glowing data points" data-location="World Map" style="background-image: url('https://placeholder.pics/svg/300');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
+<!-- Floating Data Points -->
+<div class="absolute top-[30%] left-[20%] p-1">
+<div class="size-3 bg-primary rounded-full animate-ping absolute"></div>
+<div class="size-3 bg-primary rounded-full relative border-2 border-white shadow-lg"></div>
+</div>
+<div class="absolute top-[40%] right-[30%] p-1">
+<div class="size-2 bg-blue-500 rounded-full animate-ping absolute"></div>
+<div class="size-2 bg-blue-500 rounded-full relative border border-white shadow-lg"></div>
+</div>
+<div class="absolute bottom-[30%] right-[20%] p-1">
+<div class="size-2 bg-white rounded-full relative border border-white shadow-lg"></div>
+</div>
+<div class="absolute bottom-4 left-4 right-4">
+<div class="flex items-center justify-between text-white text-sm">
+<span>Top Region</span>
+<span class="font-bold">Europe (45%)</span>
+</div>
+<div class="w-full h-1 bg-white/20 rounded-full mt-2 overflow-hidden">
+<div class="h-full bg-primary w-[45%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Recent Users Table -->
+<div class="glass-card rounded-2xl lg:col-span-2 overflow-hidden flex flex-col">
+<div class="p-6 border-b border-glass-border flex justify-between items-center">
+<h3 class="text-white text-lg font-bold">Recent Users</h3>
+<div class="flex gap-2">
+<button class="p-2 text-gray-400 hover:text-white hover:bg-glass-surface rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+</button>
+<button class="p-2 text-gray-400 hover:text-white hover:bg-glass-surface rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">download</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm text-gray-400">
+<thead class="text-xs uppercase bg-glass-surface/50 text-gray-300">
+<tr>
+<th class="px-6 py-4 font-semibold">User</th>
+<th class="px-6 py-4 font-semibold">Status</th>
+<th class="px-6 py-4 font-semibold">Plan</th>
+<th class="px-6 py-4 font-semibold">Joined</th>
+<th class="px-6 py-4 font-semibold text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-glass-border">
+<tr class="hover:bg-glass-surface transition-colors group">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="size-8 rounded-full bg-cover bg-center" data-alt="Portrait of Sarah Jenkins" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDzdLJmbz2o2SOY1MJLvi4AIXKeyvgYd18__0dxfhzJm_IQrC02zgqzNGP5jIkjBjdpZKQkEB3la5vekxKcYFDdGzivDv7wiFpLKNQ4uS8ih7glDwyZ3s0zd9DM1fS7wWWhn3hkxWO1uvnZSJmUl30p_OtixlppcHYDgIsLKm0zpBO902DRXjW-YQSF8So0pz_gyJZqdE3ivITgatJF3rppPBh7EIi9bBZA9pbcFoYduoTohaprbxKJwIE19X2_0zZDtKntTPa02mzc')"></div>
+<div class="text-white font-medium">Sarah Jenkins</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                                    Active
+                                                </span>
+</td>
+<td class="px-6 py-4 text-white">Pro</td>
+<td class="px-6 py-4">Oct 24, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-lg">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-glass-surface transition-colors group">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="size-8 rounded-full bg-cover bg-center" data-alt="Portrait of Michael Ross" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBGQAZVmExJSPDOy-H3iO7IVNiNmrSAzX1SFavboXzaXpFg_rwhNGmKLA9qSrGDcbUmkM44pCPdDiBWycUw8A3-MVSMgwyMkHzvVU6qjTsphJB_grpOojhmoUcXmO-c9DpP2Oba_4UQQkQpXrT2ryFkbuptSg-ayIcCJEp2Tb5JixmsoexxNtcNcg9P7OQdTsXLAlHNGITf7XBKtt1xHbYy_sqfevRK7mCQUeNJOV-e7gKBgWh14J7d_R6Oy1u3syHPcDYyFx-5Cq_-')"></div>
+<div class="text-white font-medium">Michael Ross</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-500/10 text-gray-400 border border-gray-500/20">
+                                                    Offline
+                                                </span>
+</td>
+<td class="px-6 py-4 text-white">Free</td>
+<td class="px-6 py-4">Oct 23, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-lg">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-glass-surface transition-colors group">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="size-8 rounded-full bg-cover bg-center" data-alt="Portrait of Emma Wilson" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCy2Ad9jXX_OBETOj-AnzSBUUnLGGoHgwrjCSQ_baCGzUmOGXPx5Hbr6rpVza2T3LkNGBKwIymV8csXMLQsKYXNoJ3VlZWbYg1KIgX2EFdY0pAdmB0PR7K2dqcK1qDdypCDNViMIqqoKp5REuCnwMjE4EqtNtWyhUICj9wVhSnTRAR3cIT2GUDgntmws_GWaTY3yyfeolco5aHhmWZpOoH1L9Xuxs9eB8o_LPlpRlkWjDe3F7a4SPVf8z8MGu-PY9oC4Kr7kQEg6fjf')"></div>
+<div class="text-white font-medium">Emma Wilson</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                                    Active
+                                                </span>
+</td>
+<td class="px-6 py-4 text-white">Business</td>
+<td class="px-6 py-4">Oct 21, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-lg">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-glass-surface transition-colors group">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="size-8 rounded-full bg-cover bg-center" data-alt="Portrait of David Kim" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBHq3WYOXzIGtvfn5nyq-khyfCgSojhQIBysFa5Xa0iAqqqqaQqMUax9u_QlUgGt6lI9ib7QI7V67HE1ItWO5Sj093Hw_ZiXlySr9D1oSUesE0LQ1YCWGXgZq4pQmiQcQS11ol85CLEZ4ALy1oWSabWsjUlTRUI-fcQ284ybmHhxXzclac3hYOfgKDgKFNHHzkgwbITLZGJbT3PNXivcE9XCnlnVImWGVNfayC-VUm-by_MwvgO8ghuDnYoXdUmJlTpPjjp7JdIlk0i')"></div>
+<div class="text-white font-medium">David Kim</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                                    Pending
+                                                </span>
+</td>
+<td class="px-6 py-4 text-white">Pro</td>
+<td class="px-6 py-4">Oct 20, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-lg">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Top Destinations List -->
+<div class="glass-card rounded-2xl p-6 flex flex-col gap-6">
+<h3 class="text-white text-lg font-bold">Top Destinations</h3>
+<div class="space-y-4">
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-16 h-16 rounded-xl bg-cover bg-center shadow-lg group-hover:shadow-primary/30 transition-all duration-300" data-alt="Eiffel Tower in Paris France" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBl0PccJALZayYUPv1DZ49kP3tnFD_viELSITlBujOfl0QZ8bBosw3Ds-GQy46fvHMkEYnKwHOCGyXdiyl1mZPec5rqHPqtqj05utT_OGqCOskc8JH3eUKkiIj7FJGwFyuSn2_BWz6wFf44CI3OAxhZENtsitn49E037_s2SXKuvRAky29a27fJHUoVSzPPU-19IMFF1vBL0Kgv_i3O2gAeDHS7s48ITsI7P_L5YG4PAALBoQuFNn3h3cPv131Fuko2D-ThFinj5aS7');"></div>
+<div class="flex-1">
+<h4 class="text-white font-semibold group-hover:text-primary transition-colors">Paris, France</h4>
+<div class="w-full bg-glass-surface h-1.5 rounded-full mt-2">
+<div class="bg-gradient-to-r from-primary to-purple-400 h-full rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<span class="text-xs font-bold text-white">2.4k</span>
+</div>
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-16 h-16 rounded-xl bg-cover bg-center shadow-lg group-hover:shadow-blue-500/30 transition-all duration-300" data-alt="Neon streets of Tokyo Japan" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCYV9KNdkus3yFesqAa6w4t9YfGoGt9oke4o0OXlaCv-lskMQSxiYNjlG6LJ93zt6g7TgXSSicP_jRhHg9q7DhCnUMPh47RbdwAo1xG2PV6xW8BUSSMOu9JFe-zvVUFq0SBtzNLDGtwANXaJNsewieEvFIeLnwZDm0zuvxe50Vzm31vlWz9OXTKnAYBvdKqSzCFJUJv1VCXdBGd08Hs7p0Ko-MkmaLZBqyPKOCjYbF71KIGnfEcfVx-dq1KO9jGWG2jX91Iym8u1ghm');"></div>
+<div class="flex-1">
+<h4 class="text-white font-semibold group-hover:text-blue-400 transition-colors">Tokyo, Japan</h4>
+<div class="w-full bg-glass-surface h-1.5 rounded-full mt-2">
+<div class="bg-gradient-to-r from-blue-500 to-cyan-400 h-full rounded-full" style="width: 65%"></div>
+</div>
+</div>
+<span class="text-xs font-bold text-white">1.8k</span>
+</div>
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-16 h-16 rounded-xl bg-cover bg-center shadow-lg group-hover:shadow-emerald-500/30 transition-all duration-300" data-alt="Temple in Bali Indonesia" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD7PI-vEVabalG654eZ-SiYPyqLrLrQMYp5E7YLbMIPO0BABwFCVDXnzAIOqBqxxxqbmw5_X8n-6vfilTWgirii1hpOW8U835lZNE13icWR1dEUz_kXWZg38wTMIUVd_2nADfsEUie3UmuuDrV1JsEI1Xt6J70j6UwVxOTh7_9HSe-QQYCfSYrj685aT4X9reeu4TakkhWWL0qTNO0bVgVRGBiRk6sJiIhGu_VRNntG-7BjcUi5UCjKu704eabzq-KKeJQTvfhmbEtR');"></div>
+<div class="flex-1">
+<h4 class="text-white font-semibold group-hover:text-emerald-400 transition-colors">Bali, Indonesia</h4>
+<div class="w-full bg-glass-surface h-1.5 rounded-full mt-2">
+<div class="bg-gradient-to-r from-emerald-500 to-green-300 h-full rounded-full" style="width: 50%"></div>
+</div>
+</div>
+<span class="text-xs font-bold text-white">1.2k</span>
+</div>
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-16 h-16 rounded-xl bg-cover bg-center shadow-lg group-hover:shadow-orange-500/30 transition-all duration-300" data-alt="Skyline of New York City USA" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDwOF6uyzWVygbajBDRd60bN6q4KLbxBKBwZifM5eVGYTGZ57ktTbfABolhVwbm1oOkbkM0fPbeLLhJawHs3odDG3XzVFZ9sXDMiKesxV_NacsXNUr42jFGMds6hFcfmNptPIqVzgx0iCGp0r8B2iNNULaAaxEkjRzIDFecaPgHjCQKaJV_EG4rEMCyx6kE8vzXLxiApm96nYq3EU1pJRg7XrJ48BXqrsBDZnn6pThkewk6NwOLxI8gYYewlzZL9p-g3thgt12dhgB8');"></div>
+<div class="flex-1">
+<h4 class="text-white font-semibold group-hover:text-orange-400 transition-colors">New York, USA</h4>
+<div class="w-full bg-glass-surface h-1.5 rounded-full mt-2">
+<div class="bg-gradient-to-r from-orange-500 to-yellow-300 h-full rounded-full" style="width: 40%"></div>
+</div>
+</div>
+<span class="text-xs font-bold text-white">950</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="mt-12 text-center text-xs text-gray-500 pb-4">
+<p>© 2024 GlobeTrotter Inc. All rights reserved. <a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></p>
+</div>
+</div>
+</main>
+</div>
+</body></html>

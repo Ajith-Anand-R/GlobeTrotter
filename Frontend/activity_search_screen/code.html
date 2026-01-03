@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GlobeTrotter - Activity Search</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#724b6a",
+                        "primary-hover": "#8e5d84",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#1b171a",
+                        "glass-border": "rgba(255, 255, 255, 0.1)",
+                        "glass-bg": "rgba(255, 255, 255, 0.05)",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 30, 30, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.03) 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        /* Hide scrollbar for clean horizontal scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-white font-display min-h-screen flex flex-col selection:bg-primary selection:text-white overflow-x-hidden">
+<!-- Ambient Background Effects -->
+<div class="fixed inset-0 z-0 pointer-events-none">
+<div class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-primary/20 rounded-full blur-[120px] mix-blend-screen opacity-40"></div>
+<div class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] mix-blend-screen opacity-30"></div>
+<div class="absolute top-[40%] left-[30%] w-[400px] h-[400px] bg-purple-900/20 rounded-full blur-[100px] mix-blend-screen opacity-20"></div>
+</div>
+<!-- Navigation -->
+<nav class="sticky top-0 z-50 glass-panel border-b border-glass-border">
+<div class="max-w-[1440px] mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[32px]">travel_explore</span>
+</div>
+<h2 class="text-white text-xl font-bold tracking-tight">GlobeTrotter</h2>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-white/70 hover:text-white text-sm font-medium transition-colors" href="#">Trips</a>
+<a class="text-white text-sm font-medium border-b-2 border-primary pb-0.5" href="#">Explore</a>
+<a class="text-white/70 hover:text-white text-sm font-medium transition-colors" href="#">Community</a>
+<a class="text-white/70 hover:text-white text-sm font-medium transition-colors" href="#">Saved</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden md:flex cursor-pointer items-center justify-center overflow-hidden rounded-full h-9 px-4 bg-primary hover:bg-primary-hover transition-colors text-white text-sm font-bold shadow-lg shadow-primary/20">
+<span class="truncate">My Trip (3)</span>
+</button>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-9 border border-white/20" data-alt="User profile picture placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBB1V4kT5DkULjE1t4gdyhbqLE-SgDaVK0HIoKCsdwCJXFUcRa7N4xk92p5cSAGI-eUvNxVxsfqTviAPDf-_t7XmvdutuNx_wQkeejgOaAh-nxekayctN-nn34_0k8BiZFf2I4rsvjOS-PvCmoJ4iJHIjb_KugXDhT4jswxRoyMjXHF_0_sVjIqhH0WQVgn0jiBm1F5QHwb5P8z9gpkwLeT0yaYEUckU0aAfT3KmM3jEAJIp-bQTfVKsRvWwIhEktDYs1SEAoxjhxrC");'></div>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="relative z-10 flex-1 flex flex-col items-center w-full max-w-[1440px] mx-auto px-4 md:px-8 pt-8 pb-24">
+<!-- Hero & Filter Section -->
+<header class="w-full flex flex-col gap-6 mb-10">
+<div class="flex flex-col md:flex-row justify-between items-end gap-4">
+<div>
+<div class="flex items-center gap-2 text-white/50 text-sm mb-2">
+<span>Japan</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span>Kyoto</span>
+</div>
+<h1 class="text-4xl md:text-5xl font-bold leading-tight tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/70">
+                        Explore Activities in Kyoto
+                    </h1>
+</div>
+<div class="text-right hidden md:block">
+<p class="text-white/60 text-sm">Oct 12 - Oct 15 • 2 Guests</p>
+</div>
+</div>
+<!-- Glassy Search & Filter Bar -->
+<div class="glass-panel rounded-2xl p-4 md:p-5 flex flex-col lg:flex-row gap-5 items-start lg:items-center shadow-2xl shadow-black/20">
+<!-- Search Input -->
+<div class="relative w-full lg:w-[320px] shrink-0 group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-black/20 hover:bg-black/30 focus:bg-black/40 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder-white/30 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all" placeholder="Search activities..."/>
+</div>
+<!-- Divider -->
+<div class="hidden lg:block h-8 w-px bg-white/10 mx-2"></div>
+<!-- Filters -->
+<div class="flex-1 flex flex-wrap gap-3 items-center w-full">
+<!-- Category Dropdown -->
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-all text-sm font-medium group">
+<span class="material-symbols-outlined text-[20px] text-white/70 group-hover:text-white">category</span>
+                        Categories
+                        <span class="material-symbols-outlined text-[18px] text-white/40">expand_more</span>
+</button>
+<!-- Filter Chips -->
+<button class="px-4 py-2.5 rounded-lg bg-primary text-white border border-primary/50 text-sm font-medium shadow-lg shadow-primary/20">
+                        All
+                    </button>
+<button class="px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 hover:text-white text-sm font-medium transition-all">
+                        Adventure
+                    </button>
+<button class="px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 hover:text-white text-sm font-medium transition-all">
+                        Food &amp; Drink
+                    </button>
+<button class="px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 hover:text-white text-sm font-medium transition-all">
+                        Culture
+                    </button>
+<div class="hidden md:flex ml-auto items-center gap-2">
+<button class="size-10 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-all" title="List View">
+<span class="material-symbols-outlined text-white/70">grid_view</span>
+</button>
+<button class="size-10 flex items-center justify-center rounded-lg bg-transparent hover:bg-white/5 border border-transparent hover:border-white/10 transition-all" title="Map View">
+<span class="material-symbols-outlined text-white/40">map</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Activities Grid -->
+<section class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<article class="glass-card rounded-2xl overflow-hidden group hover:-translate-y-1 transition-transform duration-300 flex flex-col h-full">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img alt="Fushimi Inari Shrine torii gates pathway" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Fushimi Inari Shrine torii gates pathway" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHn-AQh6LDVdtjy-MdqKsIW1Tvj1awg6c3SDRXXfymI33jwN9FStyZ48IU4H8jtNPyZHtMKKxSVidqtNqK_1ZRYxHLkGvFxkHQDQrjPqiCUqQ94_UF_wFNufVCejJU6qdtn2uZHl3uCXEsjVZgxogPnvoMYZHQGyV9xt_GFtUNOzYj0m-9QPJ4HKE3TsquCvDD33Ghg6OpNBRk4J7PH-7DWUarTeeb0DPMYhnLucfax3IF4giQIO0MK1DD89GbhpL08jRvmd1GQWp4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-black/40 backdrop-blur-sm hover:bg-primary text-white transition-colors border border-white/10">
+<span class="material-symbols-outlined text-[20px] block">favorite</span>
+</button>
+<div class="absolute bottom-3 left-3 flex gap-2">
+<span class="px-2 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-bold text-white border border-white/10">$$</span>
+<span class="px-2 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-medium text-white border border-white/10 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 3h
+                        </span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold text-white leading-snug group-hover:text-primary-300 transition-colors">Fushimi Inari Sunset Hike</h3>
+<div class="flex items-center gap-1 bg-white/5 px-1.5 py-0.5 rounded text-xs font-semibold text-yellow-400 border border-white/5">
+<span class="material-symbols-outlined text-[14px] fill-current">star</span>
+                            4.9
+                        </div>
+</div>
+<p class="text-sm text-white/60 mb-4 line-clamp-2">Experience the magical torii gates at dusk with a private guide and hidden trails.</p>
+<div class="mt-auto pt-4 border-t border-white/10 flex items-center justify-between">
+<span class="text-xs text-white/40 uppercase font-semibold tracking-wider">Adventure</span>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-primary hover:text-white border border-white/10 hover:border-primary text-sm font-medium transition-all group/btn">
+                            Add
+                            <span class="material-symbols-outlined text-[18px] group-hover/btn:rotate-90 transition-transform">add</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="glass-card rounded-2xl overflow-hidden group hover:-translate-y-1 transition-transform duration-300 flex flex-col h-full">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img alt="Traditional Japanese tea ceremony preparation" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Traditional Japanese tea ceremony preparation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPfBirJ9fDT6GqFXx0UxDTGyvYGED8UGGRKYiRHy73brTqRU17EPu0iMOTG1xxnhV3fT3shxgdzKliYJsMqHPuf5plw1YNr9L_cnKrmuqCaRhZlQ_WGQQT_9ybKUmAY4i3T1utc2FpW36cpAGyf0TV-rXbcd-QKDBPSHj-omuxh2HUD85To12b2Fhzd83NOt3HHYlKWoF098BugmCTXl3BXZkLHJbKOC2sEKBIryZ_Dqi9ez84ypyZlq0xDZfKrCkNzGDAMzIL8Nzp"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-black/40 backdrop-blur-sm hover:bg-primary text-white transition-colors border border-white/10">
+<span class="material-symbols-outlined text-[20px] block">favorite</span>
+</button>
+<div class="absolute bottom-3 left-3 flex gap-2">
+<span class="px-2 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-bold text-white border border-white/10">$$$</span>
+<span class="px-2 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-medium text-white border border-white/10 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 1.5h
+                        </span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold text-white leading-snug group-hover:text-primary-300 transition-colors">Private Tea Ceremony</h3>
+<div class="flex items-center gap-1 bg-white/5 px-1.5 py-0.5 rounded text-xs font-semibold text-yellow-400 border border-white/5">
+<span class="material-symbols-outlined text-[14px] fill-current">star</span>
+                            5.0
+                        </div>
+</div>
+<p class="text-sm text-white/60 mb-4 line-clamp-2">Immerse yourself in Zen culture with a tea master in a secluded Gion tea house.</p>
+<div class="mt-auto pt-4 border-t border-white/10 flex items-center justify-between">
+<span class="text-xs text-white/40 uppercase font-semibold tracking-wider">Culture</span>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-primary hover:text-white border border-white/10 hover:border-primary text-sm font-medium transition-all group/btn">
+                            Add
+                            <span class="material-symbols-outlined text-[18px] group-hover/btn:rotate-90 transition-transform">add</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="glass-card rounded-2xl overflow-hidden group hover:-translate-y-1 transition-transform duration-300 flex flex-col h-full">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img alt="Arashiyama Bamboo Grove pathway" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Arashiyama Bamboo Grove pathway" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDelnrL6B1sbmNrzitSrRrLRarzw6vqx1_nWCm_pQuWtVi9b_0XO7XmoWEp8XWp1OExpbqtDiLi5YKOI3ihEPt0_vHZvYxOtImIFhWGyyTsP6FDqQmmT2v9UdFmzzwTJudKJ1ra8lBNPdfx3I9SdxXdw6XnBBr8nzOeCgA0He-fefMh2m2RRkyjYiEBkt-XPKix7fOIXUe-Mdbru_XIMIXjneF5X6EBBmnhaosuCTcUtIz5j6aYq6e9ZeDHMMR71rIfY3OeWzqfzKbK"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-black/40 backdrop-blur-sm hover:bg-primary text-white transition-colors border border-white/10">
+<span class="material-symbols-outlined text-[20px] block">favorite</span>
+</button>
+<div class="absolute bottom-3 left-3 flex gap-2">
+<span class="px-2 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-bold text-white border border-white/10">Free</span>
+<span class="px-2 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-medium text-white border border-white/10 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 2h
+                        </span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold text-white leading-snug group-hover:text-primary-300 transition-colors">Arashiyama Bamboo Morning</h3>
+<div class="flex items-center gap-1 bg-white/5 px-1.5 py-0.5 rounded text-xs font-semibold text-yellow-400 border border-white/5">
+<span class="material-symbols-outlined text-[14px] fill-current">star</span>
+                            4.7
+                        </div>
+</div>
+<p class="text-sm text-white/60 mb-4 line-clamp-2">Beat the crowds with this early morning walking tour of the famous bamboo grove.</p>
+<div class="mt-auto pt-4 border-t border-white/10 flex items-center justify-between">
+<span class="text-xs text-white/40 uppercase font-semibold tracking-wider">Nature</span>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white border border-primary hover:bg-primary-hover text-sm font-medium transition-all group/btn">
+                            Added
+                            <span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="glass-card rounded-2xl overflow-hidden group hover:-translate-y-1 transition-transform duration-300 flex flex-col h-full">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img alt="Golden Pavilion Kinkaku-ji temple reflection" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Golden Pavilion Kinkaku-ji temple reflection" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjDivNHPFXOVKqgq7ZuBn28oh3bUSZBiTjI2y4XLDmlMQzP8t5D77mXwM_ce9R1DzqZlHhEQtVG9Fbq0sNU0tbjj-JW6FOUlMNHzc9K18E_D1ijBmZcgwMRhRMB2zMXRsNmVnoNzs0S79sFwiGM9QPd8vioU12n1iZCrzXWILVNPXSHr5ajGdps2-Lq0DNXgpxrtPGxXXzbkgZmk9UTLqPCr6zxvt6AJb4u9NtulJwxkuIyXebhjChSoy7ofQV21v1QkOktx0Oms9I"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-black/40 backdrop-blur-sm hover:bg-primary text-white transition-colors border border-white/10">
+<span class="material-symbols-outlined text-[20px] block">favorite</span>
+</button>
+<div class="absolute bottom-3 left-3 flex gap-2">
+<span class="px-2 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-bold text-white border border-white/10">$</span>
+<span class="px-2 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-medium text-white border border-white/10 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 1h
+                        </span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold text-white leading-snug group-hover:text-primary-300 transition-colors">Kinkaku-ji Golden Pavilion</h3>
+<div class="flex items-center gap-1 bg-white/5 px-1.5 py-0.5 rounded text-xs font-semibold text-yellow-400 border border-white/5">
+<span class="material-symbols-outlined text-[14px] fill-current">star</span>
+                            4.8
+                        </div>
+</div>
+<p class="text-sm text-white/60 mb-4 line-clamp-2">Visit the iconic Zen Buddhist temple covered in gold leaf, reflecting over the pond.</p>
+<div class="mt-auto pt-4 border-t border-white/10 flex items-center justify-between">
+<span class="text-xs text-white/40 uppercase font-semibold tracking-wider">Landmark</span>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-primary hover:text-white border border-white/10 hover:border-primary text-sm font-medium transition-all group/btn">
+                            Add
+                            <span class="material-symbols-outlined text-[18px] group-hover/btn:rotate-90 transition-transform">add</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 5 -->
+<article class="glass-card rounded-2xl overflow-hidden group hover:-translate-y-1 transition-transform duration-300 flex flex-col h-full">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img alt="Geisha walking in Gion district" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Geisha walking in Gion district" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuunC6SBk4jjXQmWOBA5ESNr3aBSn1cMu36ToOzMDneWtPcpi3xeNZPqTLlNGL3zbIHzHQpfLZrx1v8GD2GEFRz_T8Bv8pvbQZgrr6nVIjyf_PZvwr8b3MzhjKR5lWt8PcaYvg1sGv7Ghx5lRaqREHMrbb_WPp37BRjftoUITI9QGVffcqBXFVKZU5DB9QgPyc6O607kK3hFaIu1t-Vl68YsgR7nomPxWOaTaV_Ck2Ua2LOC77LuN0QPYdGSVbEEt0TlIdvFzi_Sum"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-black/40 backdrop-blur-sm hover:bg-primary text-white transition-colors border border-white/10">
+<span class="material-symbols-outlined text-[20px] block">favorite</span>
+</button>
+<div class="absolute bottom-3 left-3 flex gap-2">
+<span class="px-2 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-bold text-white border border-white/10">$$</span>
+<span class="px-2 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-medium text-white border border-white/10 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 2.5h
+                        </span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold text-white leading-snug group-hover:text-primary-300 transition-colors">Gion District Night Walk</h3>
+<div class="flex items-center gap-1 bg-white/5 px-1.5 py-0.5 rounded text-xs font-semibold text-yellow-400 border border-white/5">
+<span class="material-symbols-outlined text-[14px] fill-current">star</span>
+                            4.6
+                        </div>
+</div>
+<p class="text-sm text-white/60 mb-4 line-clamp-2">Explore the historic geisha district at night with a local guide telling folklore stories.</p>
+<div class="mt-auto pt-4 border-t border-white/10 flex items-center justify-between">
+<span class="text-xs text-white/40 uppercase font-semibold tracking-wider">Culture</span>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-primary hover:text-white border border-white/10 hover:border-primary text-sm font-medium transition-all group/btn">
+                            Add
+                            <span class="material-symbols-outlined text-[18px] group-hover/btn:rotate-90 transition-transform">add</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 6 -->
+<article class="glass-card rounded-2xl overflow-hidden group hover:-translate-y-1 transition-transform duration-300 flex flex-col h-full">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img alt="Sushi platter assortment" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Sushi platter assortment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5Gzn4iXK_ioV2SkF5KzwKu0alrhT4xBgp6WphE-mMDLrMZaJppXQxvZmlXmlkx5fZtYEAX7r73UggrLxY9xnRPbhGuycjSJZy9Dt39xoD0UF9kahaE1h_2QYQ97w4zqZcchuHajlYSMGgAhHHHRvxKSDJBwTa_2nX2LtXKu4k860G3dvpGNnXh-bs2wWCZM1BQllR6IC44kLtu07fq-5NIgWewrrdsW_WvOjnZwATNfofFv9xckg7JflFrJMPt4xhTztsTxa58FLu"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-black/40 backdrop-blur-sm hover:bg-primary text-white transition-colors border border-white/10">
+<span class="material-symbols-outlined text-[20px] block">favorite</span>
+</button>
+<div class="absolute bottom-3 left-3 flex gap-2">
+<span class="px-2 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-bold text-white border border-white/10">$$$</span>
+<span class="px-2 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-medium text-white border border-white/10 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 2h
+                        </span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold text-white leading-snug group-hover:text-primary-300 transition-colors">Omakase Sushi Experience</h3>
+<div class="flex items-center gap-1 bg-white/5 px-1.5 py-0.5 rounded text-xs font-semibold text-yellow-400 border border-white/5">
+<span class="material-symbols-outlined text-[14px] fill-current">star</span>
+                            4.9
+                        </div>
+</div>
+<p class="text-sm text-white/60 mb-4 line-clamp-2">A curated 12-course sushi meal by master chef Kenji in Pontocho Alley.</p>
+<div class="mt-auto pt-4 border-t border-white/10 flex items-center justify-between">
+<span class="text-xs text-white/40 uppercase font-semibold tracking-wider">Dining</span>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-primary hover:text-white border border-white/10 hover:border-primary text-sm font-medium transition-all group/btn">
+                            Add
+                            <span class="material-symbols-outlined text-[18px] group-hover/btn:rotate-90 transition-transform">add</span>
+</button>
+</div>
+</div>
+</article>
+</section>
+</main>
+<!-- Floating Itinerary Widget (Bottom Right) -->
+<div class="fixed bottom-6 right-6 z-50">
+<button class="group relative flex items-center gap-4 pl-4 pr-1 py-1 rounded-full bg-primary/90 backdrop-blur-md text-white shadow-2xl shadow-primary/40 border border-white/20 hover:scale-105 transition-all">
+<div class="flex flex-col items-start mr-2">
+<span class="text-xs font-medium text-white/80">Your Trip</span>
+<span class="text-sm font-bold">3 items added</span>
+</div>
+<div class="bg-white/10 rounded-full p-3 group-hover:bg-white group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined block">arrow_forward</span>
+</div>
+<!-- Badge -->
+<span class="absolute -top-2 -left-2 size-6 bg-red-500 rounded-full flex items-center justify-center text-[10px] font-bold border-2 border-background-dark">3</span>
+</button>
+</div>
+</body></html>
